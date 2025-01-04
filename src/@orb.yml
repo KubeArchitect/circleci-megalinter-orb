@@ -1,0 +1,8 @@
+version: 2.1
+
+description: >
+  CircleCI Orb to run megalinter on your project.
+
+display:
+  home_url: "https://megalinter.io/latest/"
+  source_url: "https://github.com/RelativeSure/circleci-megalinter-orb"
