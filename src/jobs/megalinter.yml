@@ -3,6 +3,9 @@ description: >
 
 docker:
   - image: 'oxsecurity/<<parameters.flavor>>:<<parameters.version>>'
+    auth:
+      username: $DOCKER_HUB_USER
+      password: $DOCKER_HUB_PASSWORD
 
 parameters:
   version:

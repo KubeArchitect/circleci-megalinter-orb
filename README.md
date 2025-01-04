@@ -11,6 +11,12 @@ This repository is designed to be automatically ingested and modified by the Cir
 
 _**Edit this area to include a custom title and description.**_
 
+Following variables needs to be set to correct clone the megalinter image. They are personal API keys from Docker Hub.
+```bash
+$DOCKER_HUB_USER
+$DOCKER_HUB_PASSWORD
+```
+
 ---
 
 ## Resources
