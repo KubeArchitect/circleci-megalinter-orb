@@ -43,9 +43,10 @@ workflows:
           orb_name: relativesure/megalinter
           vcs_type: << pipeline.project.type >>
           pub_type: production
+          github_token: $GH_PACKAGES_TOKEN
           # Ensure this job requires all test jobs and the pack job.
           requires:
             - orb-tools/pack
             # - command-test
-          context: orb-publishing-context
+          context: <publishing-context>
           filters: *release-filters
