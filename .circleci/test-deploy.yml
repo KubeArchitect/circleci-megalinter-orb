@@ -5,7 +5,6 @@ orbs:
   orb-tools: circleci/orb-tools@12.3
   # The orb definition is intentionally not included here. It will be injected into the pipeline.
   <orb-name>: {}
-  megalinter: relativesure/megalinter@<<pipeline.parameters.dev-orb-version>>
 
 # Use this tag to ensure test jobs always run,
 # even though the downstream publish job will only run on release tags.
@@ -48,5 +47,5 @@ workflows:
           requires:
             - orb-tools/pack
             - command-test
-          context: orb-publisher
+          context: orb-publishing-context
           filters: *release-filters
