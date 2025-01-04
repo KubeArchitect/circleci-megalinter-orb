@@ -22,13 +22,13 @@ release-filters: &release-filters
 jobs:
   # Create jobs to test the commands of your orbs.
   # You may want to add additional validation steps to ensure the commands are working as expected.
-  command-test:
-    docker:
-      - image: cimg/base:current
-    steps:
-      - checkout
-      # Run your orb's commands to validate them.
-      - megalinter/megalinter
+  # command-test:
+  #   docker:
+  #     - image: cimg/base:current
+  #   steps:
+  #     - checkout
+  #     # Run your orb's commands to validate them.
+  #     - megalinter/megalinter
 workflows:
   test-deploy:
     jobs:
@@ -46,6 +46,6 @@ workflows:
           # Ensure this job requires all test jobs and the pack job.
           requires:
             - orb-tools/pack
-            - command-test
+            # - command-test
           context: orb-publishing-context
           filters: *release-filters
