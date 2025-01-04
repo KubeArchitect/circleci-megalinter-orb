@@ -2,7 +2,7 @@ description: >
   Run megalinter on your project.
 
 docker:
-  - image: 'oxsecurity/<<parameters.flavor>>:<<parameters.version>>'
+  - image: 'oxsecurity/megalinter-<<parameters.flavor>>:<<parameters.version>>' # oxsecurity/megalinter-python:v8.3.0
     auth:
       username: $DOCKER_HUB_USER
       password: $DOCKER_HUB_PASSWORD
@@ -21,11 +21,6 @@ parameters:
       Choose a specific flavor of megalinter. Default is python.
       Available flavors can be checked here:
       https://megalinter.io/latest/flavors/
-  # lint-directory:
-  #   type: string
-  #   default: "."
-  #   description: |
-  #     Directory to lint
   github_token:
     type: string
     description: |
