@@ -1,13 +1,10 @@
 description: >
-  Sample example description.
-# Provide a use-case based example for using this orb.
-# Everything in the `usage` section will be displayed in the orb registry.
-# Comments are not retained.
+  Run the Megalinter on your project to lint all supported files.
 usage:
   version: 2.1
   orbs:
-    <orb-name>: <namespace>/<orb-name>@1.2.3
+    megalinter: relativesure/megalinter@v0.0.1
   workflows:
-    use-my-orb:
+    run-megalinter:
       jobs:
-        - <orb-name>/<job-name>
+        - megalinter/megalinter
