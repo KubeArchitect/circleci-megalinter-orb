@@ -2,6 +2,8 @@ version: 2.1
 
 description: >
   CircleCI Orb to run megalinter on your project.
+  Megalinter can run different varying linters on your project to ensure code quality.
+  Megalinter vs. Super-linter: https://megalinter.io/latest/mega-linter-vs-super-linter/
 
 display:
   home_url: "https://megalinter.io/latest/"

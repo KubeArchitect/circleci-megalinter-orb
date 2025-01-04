@@ -23,14 +23,14 @@ parameters:
   #   default: "."
   #   description: |
   #     Directory to lint
-  github-token:
+  github_token:
     type: string
     description: |
       GitHub token to use for the reporters in megalinter
     default: ""
 
 environment:
-  GITHUB_TOKEN=<<parameters.github-token>>
+  GITHUB_TOKEN=<<parameters.github_token>>
   CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL
   GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
   GITHUB_REF=$CI_PULL_REQUEST
