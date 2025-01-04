@@ -44,3 +44,5 @@ steps:
   - run:
       name: Run Megalinter
       command: /bin/bash -ex /entrypoint.sh
+  - store_artifacts:
+      path: megalinter-reports
