@@ -26,6 +26,11 @@ parameters:
     description: |
       GitHub token to use for the reporters in megalinter
     default: ""
+  persist_megalinter_reports:
+    type: boolean
+    description: |
+      If megalinter-reports folder should be persisted to other jobs. Ex. to automatically update files in your repo
+    default: false
 
 environment:
   GITHUB_TOKEN=<<parameters.github_token>>
@@ -46,3 +51,8 @@ steps:
       command: /bin/bash -ex /entrypoint.sh
   - store_artifacts:
       path: megalinter-reports
+  - persist_to_workspace:
+      root: /tmp/workspace
+      paths:
+        - megalinter-reports
+      when: <<parameters.persist_megalinter_reports>>
