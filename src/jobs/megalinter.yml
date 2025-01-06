@@ -52,7 +52,7 @@ steps:
   - store_artifacts:
       path: megalinter-reports
   - persist_to_workspace:
-      root: /tmp/workspace
+      root: /tmp/lint
       paths:
         - megalinter-reports
       when: <<parameters.persist_megalinter_reports>>
