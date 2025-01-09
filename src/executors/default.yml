@@ -1,0 +1,21 @@
+description: |
+  A base Megalinter with optional flavor Docker image built to run on CircleCI.
+  See list of available flavors here: https://megalinter.io/latest/flavors/
+
+parameters:
+  tag:
+    description: >
+      Select your version or any of the available tags here: https://hub.docker.com/r/oxsecurity/megalinter.
+    type: string
+    default: "latest"
+  flavor:
+    description: >
+      Choose a specific flavor of megalinter. Leave empty for no flavor.
+    type: string
+    default: ""
+
+docker:
+  - image: oxsecurity/megalinter<<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>:<<parameters.tag>>
+    auth:
+      username: $DOCKERHUB_USERNAME
+      password: $DOCKERHUB_PASSWORD
