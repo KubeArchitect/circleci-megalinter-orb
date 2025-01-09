@@ -2,10 +2,21 @@ description: >
   Run megalinter on your project.
 
 parameters:
+  github_token:
+    type: string
+    default: ""
+    description: |
+      GitHub token to use for the reporters in megalinter
+  persist_megalinter_reports:
+    type: boolean
+    default: false
+    description: |
+      If megalinter-reports folder should be persisted to other jobs. Ex. to automatically update files in your repo
   parallelism:
     type: integer
     default: 1
-    description: The number of parallel jobs to run. See https://circleci.com/docs/parallelism-faster-jobs/
+    description: |
+      Number of parallel executors to use
   executor:
     type: executor
     default: default
@@ -23,16 +34,6 @@ parameters:
       Choose a specific flavor of megalinter.
       Available flavors can be checked here:
       https://megalinter.io/latest/flavors/
-  github_token:
-    type: string
-    default: ""
-    description: |
-      GitHub token to use for the reporters in megalinter
-  persist_megalinter_reports:
-    type: boolean
-    default: false
-    description: |
-      If megalinter-reports folder should be persisted to other jobs. Ex. to automatically update files in your repo
 
 environment:
   GITHUB_TOKEN=<<parameters.github_token>>
@@ -45,7 +46,7 @@ environment:
   GITHUB_RUN_ID=$CIRCLE_BUILD_NUM
 
 executor: <<parameters.executor>>
-parallelism: <<parameters.parallelism>
+parallelism: <<parameters.parallelism>>
 
 working_directory: /tmp/lint
 # https://circleci.com/docs/reusing-config/#defining-conditional-steps
