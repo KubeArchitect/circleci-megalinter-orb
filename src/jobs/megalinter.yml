@@ -3,13 +3,13 @@ description: >
 
 parameters:
   parallelism:
-      type: integer
-      default: 1
-      description: The number of parallel jobs to run. See https://circleci.com/docs/parallelism-faster-jobs/
+    type: integer
+    default: 1
+    description: The number of parallel jobs to run. See https://circleci.com/docs/parallelism-faster-jobs/
   executor:
-      type: executor
-      default: default
-      description: The name of executor to use.
+    type: executor
+    default: default
+    description: The name of executor to use.
   version:
     type: string
     default: latest
@@ -65,5 +65,3 @@ steps:
             paths:
               - megalinter-reports
             when: <<parameters.persist_megalinter_reports>>
-
-
