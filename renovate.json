@@ -5,7 +5,9 @@
   "packageRules": [
     {
       "description": "Update CircleCI orbs",
-      "managers": ["circleci"],
+      "matchManagers": [
+        "circleci"
+      ],
       "enabled": true
     }
   ]
