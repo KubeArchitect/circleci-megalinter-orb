@@ -1,9 +1,10 @@
 description: >
-  Run the Megalinter on your project to lint all supported files.
+  Run Megalinter on your project to lint all supported files.
+  This will run without using a flavor.
 usage:
   version: 2.1
   orbs:
-    megalinter: relativesure/megalinter@1.0.3
+    megalinter: relativesure/megalinter@1.0.6
   workflows:
     run-megalinter:
       jobs:

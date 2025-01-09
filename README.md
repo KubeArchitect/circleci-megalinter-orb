@@ -12,9 +12,16 @@ This repository is designed to be automatically ingested and modified by the Cir
 _**Edit this area to include a custom title and description.**_
 
 Following variables needs to be set to correct clone the megalinter image. They are personal API keys from Docker Hub.
+
 ```bash
 $DOCKER_HUB_USER
 $DOCKER_HUB_PASSWORD
+```
+
+Setup GitHub auth within Megalinter orb by setting following environment variable:
+
+```bash
+$GITHUB_TOKEN
 ```
 
 ---
@@ -30,6 +37,7 @@ $DOCKER_HUB_PASSWORD
 We welcome [issues](https://github.com/<organization>/<project-name>/issues) to and [pull requests](https://github.com/<organization>/<project-name>/pulls) against this repository!
 
 ### How to Publish An Update
+
 1. Merge pull requests with desired changes to the main branch.
     - For the best experience, squash-and-merge and use [Conventional Commit Messages](https://conventionalcommits.org/).
 2. Find the current version of the orb.
@@ -37,11 +45,11 @@ We welcome [issues](https://github.com/<organization>/<project-name>/issues) to 
 3. Create a [new Release](https://github.com/<organization>/<project-name>/releases/new) on GitHub.
     - Click "Choose a tag" and _create_ a new [semantically versioned](http://semver.org/) tag. (ex: v1.0.0)
       - We will have an opportunity to change this before we publish if needed after the next step.
-4.  Click _"+ Auto-generate release notes"_.
+    a. Click _"+ Auto-generate release notes"_.
     - This will create a summary of all of the merged pull requests since the previous release.
     - If you have used _[Conventional Commit Messages](https://conventionalcommits.org/)_ it will be easy to determine what types of changes were made, allowing you to ensure the correct version tag is being published.
-5. Now ensure the version tag selected is semantically accurate based on the changes included.
-6. Click _"Publish Release"_.
+4. Now ensure the version tag selected is semantically accurate based on the changes included.
+5. Click _"Publish Release"_.
     - This will push a new tag and trigger your publishing pipeline on CircleCI.
 
 ### Development Orbs
