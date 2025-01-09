@@ -111,7 +111,7 @@ steps:
             paths:
               - megalinter-reports
   - when:
-      condition: <<parameters.run_git_operations>> && <<parameters.persist_megalinter_reports>> && <<parameters.apply_fixes>> && <<pipeline.git.branch.is_default>>
+      condition: <<parameters.run_git_operations>> && <<parameters.persist_megalinter_reports>> && <<parameters.apply_fixes>>
       steps:
         - run:
             environment:
