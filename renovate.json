@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "description": "Update CircleCI orbs",
+      "managers": ["circleci"],
+      "enabled": true
+    }
+  ]
+}

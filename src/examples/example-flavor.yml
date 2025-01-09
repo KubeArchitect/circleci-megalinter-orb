@@ -1,0 +1,17 @@
+description: >
+  Run Megalinter on your project to lint all supported files.
+  This will run with using the python flavor and persisting the megalinter-reports folder.
+  Aswell as running git operations to commit and push changes.
+usage:
+  version: 2.1
+  orbs:
+    megalinter: relativesure/megalinter@1.0.6
+  workflows:
+    run-megalinter:
+      jobs:
+        - megalinter/megalinter
+            flavor: python
+            persist_megalinter_reports: true
+            run_git_operations: true
+            git_user_email: "139585163+KubeArchitectBot@users.noreply.github.com"
+            git_user_name: "KubeArchitectBot"

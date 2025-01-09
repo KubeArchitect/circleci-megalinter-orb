@@ -18,7 +18,7 @@ $DOCKER_HUB_USER
 $DOCKER_HUB_PASSWORD
 ```
 
-Setup GitHub auth in Megalinter by setting following environment variable:
+Setup GitHub auth within Megalinter orb by setting following environment variable:
 
 ```bash
 $GITHUB_TOKEN
