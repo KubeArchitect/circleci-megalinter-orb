@@ -8,7 +8,7 @@ done
 echo "Items in $PARAM_UPD_SRC_FILES: $ITEMS"
 if [ -z "$ITEMS" ]; then
     echo "No updated sources found"
-    exit 0
+    circleci-agent step halt # Stop the job
 else
     echo "Updated sources found. Copying files to the repository"
     cp -a "${PARAM_UPD_SRC_FILES}/." .

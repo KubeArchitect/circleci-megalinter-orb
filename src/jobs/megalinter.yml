@@ -53,17 +53,17 @@ parameters:
     type: string
     default: ""
     description: |
-      Email to use for the Git user
+      Email to use for Git
   git_user_name:
     type: string
     default: ""
     description: |
-      Name to use for the Git user
+      Name to use for Git
   git_commit_message:
     type: string
     default: "Automated linting fixes by MegaLinter"
     description: |
-      Commit message to use for the Git user
+      Commit message to use for Git
   git_pr_title:
     type: string
     default: "[MegaLinter] Apply linters automatic fixes"
@@ -73,7 +73,12 @@ parameters:
     type: string
     default: "megalinter-fixes-$CIRCLE_BUILD_NUM"
     description: |
-      Branch name to use for the Git user
+      Branch name to use for Git
+  git_base_branch:
+    type: string
+    default: "main"
+    description: |
+      Base branch to use for Git
 
 environment:
   GITHUB_REF=$CI_PULL_REQUEST
@@ -121,18 +126,12 @@ steps:
         - github-cli/setup:
             token: <<parameters.github_token>>
         - run:
+            environment:
+              GIT_USER_EMAIL: <<parameters.git_user_email>>
+              GIT_USER_NAME: <<parameters.git_user_name>>
+              GIT_COMMIT_MESSAGE: <<parameters.git_commit_message>>
+              GIT_PR_TITLE: <<parameters.git_pr_title>>
+              GIT_BRANCH_NAME: <<parameters.git_branch_name>>
+              GIT_BASE_BRANCH: <<parameters.git_base_branch>>
             name: Set up Git
-            command: |
-              git config --local user.email "<<parameters.git_user_email>>"
-              git config --local user.name "<<parameters.git_user_name>>"
-        - run:
-            name: Create a new branch and commit the changes to the repository
-            command: |
-              git checkout -b <<parameters.git_branch_name>> \
-              && git add . \
-              && git commit -m '<<parameters.git_commit_message>>' \
-              && git push --set-upstream origin <<parameters.git_branch_name>>
-        - run:
-            name: Create a pull request
-            command: |
-              gh pr create --title '<<parameters.git_pr_title>>' --body "<<parameters.git_commit_message>>" --base master --head <<parameters.git_branch_name>>
+            command: <<include(scripts/setup_git.sh)>>
