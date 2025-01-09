@@ -1,5 +1,13 @@
 description: >
-  Run megalinter on your project.
+  This CircleCI orb integrates MegaLinter into your CI/CD pipeline.
+  MegaLinter is a tool that helps you maintain code quality by automatically
+  running linters and formatters on your codebase. This orb provides a job
+  to run MegaLinter on your project, with options to persist the linter reports,
+  run git operations to commit and push automatic fixes, and customize various
+  parameters such as Git user details and commit messages.
+
+orbs:
+  github-cli: circleci/github-cli@2.6.2
 
 parameters:
   github_token:
