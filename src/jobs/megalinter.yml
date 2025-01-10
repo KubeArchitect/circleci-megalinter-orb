@@ -102,10 +102,12 @@ environment:
   DEFAULT_WORKSPACE=$CIRCLE_WORKING_DIRECTORY
   APPLY_FIXES=<<parameters.apply_fixes>>
 
-executor:
+executor: {
   name: <<parameters.executor>>
   tag: <<parameters.tag>>
-  flavor: <<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>
+  # flavor: <<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>
+  flavor: cupcake
+}
 parallelism: <<parameters.parallelism>>
 resource_class: <<parameters.resource_class>>
 
