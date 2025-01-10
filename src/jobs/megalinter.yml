@@ -103,8 +103,8 @@ environment:
   APPLY_FIXES=<<parameters.apply_fixes>>
 
 executor: {
-  name: <<parameters.executor>>
-  tag: <<parameters.tag>>
+  name: <<parameters.executor>>,
+  tag: <<parameters.tag>>,
   # flavor: <<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>
   flavor: cupcake
 }
