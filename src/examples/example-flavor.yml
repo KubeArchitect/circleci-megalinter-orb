@@ -10,8 +10,6 @@ usage:
     run-megalinter:
       jobs:
         - megalinter/megalinter:
-            flavor: "python"
+            flavor: python
             persist_megalinter_reports: true
             run_git_operations: true
-            git_user_email: "139585163+KubeArchitectBot@users.noreply.github.com"
-            git_user_name: "KubeArchitectBot"
