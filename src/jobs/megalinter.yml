@@ -6,6 +6,11 @@ description: >
   run git operations to commit and push automatic fixes, and customize various
   parameters such as Git user details and commit messages.
 
+executor:
+  name: default
+  tag: << parameters.tag >>
+  flavor: << parameters.flavor >>
+
 parameters:
   github_token:
     type: env_var_name
@@ -43,11 +48,11 @@ parameters:
     default: true
     description: |
       If megalinter should apply fixes to the files.
-  version:
+  tag:
     type: string
-    default: latest
+    default: "latest"
     description: |
-      Choose a specific version of megalinter:
+      Choose a specific tag of megalinter:
       https://hub.docker.com/r/oxsecurity/megalinter/tags
   flavor:
     type: string
@@ -102,7 +107,6 @@ environment:
   DEFAULT_WORKSPACE=$CIRCLE_WORKING_DIRECTORY
   APPLY_FIXES=<<parameters.apply_fixes>>
 
-executor: <<parameters.executor>>
 parallelism: <<parameters.parallelism>>
 resource_class: <<parameters.resource_class>>
 
