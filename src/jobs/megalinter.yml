@@ -43,11 +43,11 @@ parameters:
     default: true
     description: |
       If megalinter should apply fixes to the files.
-  version:
+  tag:
     type: string
     default: latest
     description: |
-      Choose a specific version of megalinter:
+      Choose a specific tag of megalinter:
       https://hub.docker.com/r/oxsecurity/megalinter/tags
   flavor:
     type: string
@@ -102,7 +102,10 @@ environment:
   DEFAULT_WORKSPACE=$CIRCLE_WORKING_DIRECTORY
   APPLY_FIXES=<<parameters.apply_fixes>>
 
-executor: <<parameters.executor>>
+executor:
+  name: <<parameters.executor>>
+  tag: <<parameters.tag>>
+  flavor: <<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>
 parallelism: <<parameters.parallelism>>
 resource_class: <<parameters.resource_class>>
 
