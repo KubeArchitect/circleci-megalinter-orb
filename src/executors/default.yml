@@ -14,14 +14,16 @@ parameters:
       Choose a specific flavor of megalinter. Leave empty for no flavor.
     type: string
     default: ""
-  DOCKERHUB_USERNAME:
-    description: >
-      Docker Hub username for pulling the Megalinter Docker image.
+  dockerhub_username:
     type: env_var_name
-  DOCKERHUB_PASSWORD:
-    description: >
-      Docker Hub password for pulling the Megalinter Docker image.
+    default: DOCKERHUB_USERNAME
+    description: |
+      Docker Hub username for pulling the MegaLinter Docker image
+  dockerhub_password:
     type: env_var_name
+    default: DOCKERHUB_PASSWORD
+    description: |
+      Docker Hub password for pulling the MegaLinter Docker image
 
 docker:
   - image: oxsecurity/megalinter<<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>:<<parameters.tag>>
