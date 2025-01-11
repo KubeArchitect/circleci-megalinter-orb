@@ -1,7 +1,7 @@
 ---
 name: "\U0001F41E  Bug Report"
 description: Report any identified bugs.
-title: 'Bug: '
+title: "Bug: "
 labels: [bug]
 # assignees: ''
 body:

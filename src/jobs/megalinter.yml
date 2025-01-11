@@ -18,6 +18,16 @@ parameters:
     default: GITHUB_TOKEN
     description: |
       GitHub token to use for the reporters in megalinter
+  DOCKERHUB_USERNAME:
+    type: env_var_name
+    default: DOCKERHUB_USERNAME
+    description: |
+      Docker Hub username for pulling the MegaLinter Docker image
+  DOCKERHUB_PASSWORD:
+    type: env_var_name
+    default: DOCKERHUB_PASSWORD
+    description: |
+      Docker Hub password for pulling the MegaLinter Docker image
   parallelism:
     type: integer
     default: 1
@@ -97,8 +107,7 @@ parameters:
     description: |
       Base branch to use for Git
 
-environment:
-  GITHUB_REF=$CI_PULL_REQUEST
+environment: GITHUB_REF=$CI_PULL_REQUEST
   GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
   GITHUB_RUN_ID=$CIRCLE_BUILD_NUM
   GITHUB_SHA=$CIRCLE_SHA1
