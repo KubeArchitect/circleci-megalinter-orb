@@ -9,10 +9,10 @@ description: >
 
 executor:
   name: default
-  tag: << parameters.tag >>
-  flavor: << parameters.flavor >>
-  dockerhub_username: << parameters.dockerhub_username >>
-  dockerhub_password: << parameters.dockerhub_password >>
+  tag: <<parameters.tag>>
+  flavor: <<parameters.flavor>>
+  dockerhub_username: <<parameters.dockerhub_username>>
+  dockerhub_password: <<parameters.dockerhub_password>>
 
 parameters:
   github_token:
@@ -109,7 +109,8 @@ parameters:
     description: |
       Base branch to use for Git
 
-environment: GITHUB_REF=$CI_PULL_REQUEST
+environment:
+  GITHUB_REF=$CI_PULL_REQUEST
   GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
   GITHUB_RUN_ID=$CIRCLE_BUILD_NUM
   GITHUB_SHA=$CIRCLE_SHA1
