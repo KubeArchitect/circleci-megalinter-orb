@@ -11,8 +11,6 @@ executor:
   name: default
   tag: <<parameters.tag>>
   flavor: <<parameters.flavor>>
-  dockerhub_username: <<parameters.dockerhub_username>>
-  dockerhub_password: <<parameters.dockerhub_password>>
 
 parameters:
   github_token:
@@ -20,16 +18,6 @@ parameters:
     default: GITHUB_TOKEN
     description: |
       GitHub token to use for the reporters in megalinter
-  dockerhub_username:
-    type: env_var_name
-    default: DOCKERHUB_USERNAME
-    description: |
-      Docker Hub username for pulling the MegaLinter Docker image
-  dockerhub_password:
-    type: env_var_name
-    default: DOCKERHUB_PASSWORD
-    description: |
-      Docker Hub password for pulling the MegaLinter Docker image
   parallelism:
     type: integer
     default: 1
