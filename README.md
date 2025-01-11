@@ -68,7 +68,7 @@ A [Development orb](https://circleci.com/docs/orb-concepts/#development-orbs) ca
     # Ensure this job requires all test jobs and the pack job.
     requires:
       - orb-tools/pack
-      - command-test
+      - megalinter/megalinter
     context: <publishing-context>
     filters: *filters
 ```
