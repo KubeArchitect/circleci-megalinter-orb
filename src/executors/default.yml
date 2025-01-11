@@ -28,5 +28,5 @@ parameters:
 docker:
   - image: oxsecurity/megalinter<<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>:<<parameters.tag>>
     auth:
-      username: << parameters.DOCKERHUB_USERNAME >>
-      password: << parameters.DOCKERHUB_PASSWORD >>
+      username: << parameters.dockerhub_username >>
+      password: << parameters.dockerhub_password >>
