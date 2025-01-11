@@ -1,3 +1,4 @@
+---
 version: 2.1
 orbs:
   # Your orb will be automatically injected here during the pipeline.
@@ -26,6 +27,7 @@ workflows:
       # Test your orb's commands in a custom job and test your orb's jobs directly as a part of this workflow.
       - megalinter/megalinter:
           git_base_branch: master
+          persist_megalinter_reports: true
           context:
             - Main Context
           filters: *filters

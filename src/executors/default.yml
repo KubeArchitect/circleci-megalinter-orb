@@ -1,3 +1,4 @@
+---
 description: |
   A base Megalinter with optional flavor Docker image built to run on CircleCI.
   See list of available flavors here: https://megalinter.io/latest/flavors/
