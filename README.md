@@ -1,6 +1,6 @@
 # CircleCI Megalinter Orb
 
-[![CircleCI Build Status](https://circleci.com/gh/RelativeSure/circleci-megalinter-orb.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/RelativeSure/circleci-megalinter-orb) [![CircleCI Orb Version](https://badges.circleci.com/orbs/relativesure/megalinter.svg)](https://circleci.com/developer/orbs/orb/relativesure/megalinter) [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.comRelativeSure/circleci-megalinter-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
+[![CircleCI Build Status](https://circleci.com/gh/RelativeSure/circleci-megalinter-orb.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/RelativeSure/circleci-megalinter-orb) [![CircleCI Orb Version](https://badges.circleci.com/orbs/relativesure/megalinter.svg)](https://circleci.com/developer/orbs/orb/relativesure/megalinter) [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/RelativeSure/circleci-megalinter-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
 
 Following variables needs to be set to correct clone the megalinter image. They are personal API keys from Docker Hub.
 
