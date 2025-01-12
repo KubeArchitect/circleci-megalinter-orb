@@ -1,15 +1,6 @@
-# Orb Template
+# CircleCI Megalinter Orb
 
-<!---
-[![CircleCI Build Status](https://circleci.com/gh/<organization>/<project-name>.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/<organization>/<project-name>) [![CircleCI Orb Version](https://badges.circleci.com/orbs/<namespace>/<orb-name>.svg)](https://circleci.com/developer/orbs/orb/<namespace>/<orb-name>) [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/<organization>/<project-name>/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
-
---->
-
-A project template for Orbs.
-
-This repository is designed to be automatically ingested and modified by the CircleCI CLI's `orb init` command.
-
-_**Edit this area to include a custom title and description.**_
+[![CircleCI Build Status](https://circleci.com/gh/RelativeSure/circleci-megalinter-orb.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/RelativeSure/circleci-megalinter-orb) [![CircleCI Orb Version](https://badges.circleci.com/orbs/relativesure/megalinter.svg)](https://circleci.com/developer/orbs/orb/relativesure/megalinter) [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.comRelativeSure/circleci-megalinter-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
 
 Following variables needs to be set to correct clone the megalinter image. They are personal API keys from Docker Hub.
 
