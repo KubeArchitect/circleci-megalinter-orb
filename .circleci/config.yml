@@ -1,3 +1,4 @@
+---
 version: 2.1
 setup: true
 orbs:
@@ -25,5 +26,6 @@ workflows:
           pipeline_number: << pipeline.number >>
           vcs_type: << pipeline.project.type >>
           orb_name: megalinter
-          requires: [orb-tools/lint, orb-tools/pack, orb-tools/review, shellcheck/check]
+          requires:
+            [orb-tools/lint, orb-tools/pack, orb-tools/review, shellcheck/check]
           filters: *filters
