@@ -11,5 +11,11 @@ if [ -z "$ITEMS" ]; then
         circleci-agent step halt # Stop the job
 else
         echo "Updated sources found. Copying files to the repository"
-        cp -a "${PARAM_UPD_SRC_FILES}/." .
+        if ! cp -a "${PARAM_UPD_SRC_FILES}/." .; then
+            echo "Fejl ved kopiering af filer"
+            exit 1
+        else
+                cp -a "${PARAM_UPD_SRC_FILES}/." .
+                echo "Files copied successfully"
+        fi
 fi
