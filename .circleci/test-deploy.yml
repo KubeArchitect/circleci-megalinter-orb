@@ -26,11 +26,20 @@ workflows:
       # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
       # Test your orb's commands in a custom job and test your orb's jobs directly as a part of this workflow.
       - megalinter/megalinter:
+          name: ml
           git_base_branch: master
           persist_megalinter_reports: true
           context:
             - Main Context
           filters: *filters
+      - megalinter/megalinter
+          name: ml-flavor
+          git_base_branch: master
+          persist_megalinter_reports: true
+          flavor: cupcake
+          context:
+            - Main Context
+          filters: *filters      
       # The orb must be re-packed for publishing, and saved to the workspace.
       - orb-tools/pack:
           filters: *release-filters
@@ -42,7 +51,8 @@ workflows:
           # Ensure this job requires all test jobs and the pack job.
           requires:
             - orb-tools/pack
-            - megalinter/megalinter
+            - ml
+            - ml-flavor
           context:
             - Main Context
           filters: *release-filters
