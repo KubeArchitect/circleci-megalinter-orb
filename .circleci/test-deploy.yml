@@ -27,11 +27,9 @@ environment: &environment
   SHOW_ELAPSED_TIME: true
   SHOW_SKIPPED_LINTERS: false
 
-workflows:
-  test-deploy:
-    jobs:
-      # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
-      # Test your orb's commands in a custom job and test your orb's jobs directly as a part of this workflow.
+jobs:
+  megalinter-test-deploy:
+    steps:
       - megalinter/megalinter:
           name: ml
           git_base_branch: master
@@ -39,8 +37,7 @@ workflows:
           context:
             - Main Context
           filters: *filters
-          environment: &environment 
-      - megalinter/megalinter:
+      -  megalinter/megalinter: &environment
           name: ml-flavor
           git_base_branch: master
           persist_megalinter_reports: true
@@ -48,7 +45,13 @@ workflows:
           context:
             - Main Context
           filters: *filters
-          environment: &environment 
+
+workflows:
+  test-deploy:
+    jobs:
+      # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
+      # Test your orb's commands in a custom job and test your orb's jobs directly as a part of this workflow.
+      - megalinter-test-deploy
       # The orb must be re-packed for publishing, and saved to the workspace.
       - orb-tools/pack:
           filters: *release-filters
