@@ -64,7 +64,9 @@ workflows:
           # Ensure this job requires all test jobs and the pack job.
           requires:
             - orb-tools/pack
+          requires:
             - orb-tools/pack
+            - megalinter-test-deploy
             - megalinter-test-deploy
           context:
             - Main Context
