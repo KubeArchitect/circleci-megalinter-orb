@@ -20,15 +20,15 @@ release-filters: &release-filters
   tags:
     only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
 
-# Environment for MegaLinter variables.
-environment: &environment
-  DISABLE_ERRORS: true
-  PRINT_ALPACA: false
-  SHOW_ELAPSED_TIME: true
-  SHOW_SKIPPED_LINTERS: false
-
 jobs:
   megalinter-test-deploy:
+    machine:
+      image: ubuntu-2404:current
+    environment:
+      DISABLE_ERRORS: true
+      PRINT_ALPACA: false
+      SHOW_ELAPSED_TIME: true
+      SHOW_SKIPPED_LINTERS: false
     steps:
       - megalinter/megalinter:
           name: ml
@@ -37,8 +37,7 @@ jobs:
           context:
             - Main Context
           filters: *filters
-      -  megalinter/megalinter:
-          <<: *environment
+      - megalinter/megalinter:
           name: ml-flavor
           git_base_branch: master
           persist_megalinter_reports: true
@@ -64,9 +63,6 @@ workflows:
           # Ensure this job requires all test jobs and the pack job.
           requires:
             - orb-tools/pack
-          requires:
-            - orb-tools/pack
-            - megalinter-test-deploy
             - megalinter-test-deploy
           context:
             - Main Context
