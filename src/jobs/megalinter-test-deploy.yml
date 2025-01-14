@@ -1,0 +1,165 @@
+---
+# THIS CIRCLECI JOB IS NOT FOR PRODUCTION USE
+# THIS JOB IS FOR TESTING PURPOSES ONLY
+# YOU HAVE BEEN WARNED :)
+
+description: >
+  This CircleCI orb integrates MegaLinter into your CI/CD pipeline.
+  MegaLinter is a tool that helps you maintain code quality by automatically
+  running linters and formatters on your codebase. This orb provides a job
+  to run MegaLinter on your project, with options to persist the linter reports,
+  run git operations to commit and push automatic fixes, and customize various
+  parameters such as Git user details and commit messages.
+
+docker:
+  - image: oxsecurity/megalinter<<# parameters.flavor >>-<< parameters.flavor >><</parameters.flavor>>:<< parameters.tag >>
+    auth:
+      username: $DOCKERHUB_USERNAME
+      password: $DOCKERHUB_PASSWORD
+    environment:
+      GITHUB_TOKEN: << parameters.github_token >>
+
+parameters:
+  github_token:
+    type: env_var_name
+    default: GITHUB_TOKEN
+    description: |
+      GitHub token to use for the reporters in megalinter
+  parallelism:
+    type: integer
+    default: 1
+    description: |
+      Number of parallel executors to use
+  executor:
+    type: executor
+    default: default
+    description: The name of executor to use.
+  resource_class:
+    type: string
+    default: "medium"
+    description: |
+      The resource class to use for the job.
+      See https://circleci.com/docs/2.0/configuration-reference/#resource_class
+  persist_megalinter_reports:
+    type: boolean
+    default: false
+    description: |
+      Whether to persist the megalinter-reports folder for use in subsequent jobs.
+      This can be useful for automatically updating files in your repository based on the linter's output.
+  working_directory:
+    type: string
+    default: "/tmp/lint"
+    description: |
+      The working directory to run megalinter in.
+  apply_fixes:
+    type: boolean
+    default: true
+    description: |
+      If megalinter should apply fixes to the files.
+  tag:
+    type: string
+    default: "latest"
+    description: |
+      Choose a specific tag of megalinter:
+      https://hub.docker.com/r/oxsecurity/megalinter/tags
+  flavor:
+    type: string
+    default: ""
+    description: |
+      Choose a specific flavor of megalinter:
+      https://megalinter.io/latest/flavors/
+  run_git_operations:
+    type: boolean
+    default: false
+    description: |
+      Whether to run git operations to commit and push changes
+  git_user_email:
+    type: env_var_name
+    default: GIT_USER_EMAIL
+    description: |
+      Email to use for Git
+  git_user_name:
+    type: env_var_name
+    default: GIT_USER_NAME
+    description: |
+      Name to use for Git
+  git_commit_message:
+    type: string
+    default: "Automated linting fixes by MegaLinter"
+    description: |
+      Commit message to use for Git
+  git_pr_title:
+    type: string
+    default: "[MegaLinter] Apply linters automatic fixes"
+    description: |
+      Title to use for the pull request
+  git_branch_name:
+    type: string
+    default: "megalinter-fixes-$CIRCLE_BUILD_NUM"
+    description: |
+      Branch name to use for Git
+  git_base_branch:
+    type: string
+    default: "main"
+    description: |
+      Base branch to use for Git
+
+environment:
+  DISABLE_ERRORS=true
+  PRINT_ALPACA=false
+  SHOW_ELAPSED_TIME=true
+  SHOW_SKIPPED_LINTERS=false
+  GITHUB_REF=$CI_PULL_REQUEST
+  GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+  GITHUB_RUN_ID=$CIRCLE_BUILD_NUM
+  GITHUB_SHA=$CIRCLE_SHA1
+  GITHUB_TOKEN=<<parameters.github_token>>
+  GITHUB_WORKSPACE=$CIRCLE_WORKING_DIRECTORY
+  CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL
+  DEFAULT_WORKSPACE=$CIRCLE_WORKING_DIRECTORY
+  APPLY_FIXES=<<parameters.apply_fixes>>
+
+parallelism: <<parameters.parallelism>>
+resource_class: <<parameters.resource_class>>
+
+working_directory: <<parameters.working_directory>>
+
+steps:
+  - checkout
+  - run:
+      name: Run Megalinter
+      command: /bin/bash -ex /entrypoint.sh
+  - when:
+      condition: <<parameters.persist_megalinter_reports>>
+      steps:
+        - store_artifacts:
+            path: megalinter-reports
+        - persist_to_workspace:
+            root: <<parameters.working_directory>>
+            paths:
+              - megalinter-reports
+  - when:
+      condition: <<parameters.run_git_operations>> && <<parameters.persist_megalinter_reports>> && <<parameters.apply_fixes>>
+      steps:
+        - run:
+            environment:
+              PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
+            name: Check if updated_sources folder exists
+            command: <<include(scripts/check_updated_sources.sh)>>
+        - run:
+            environment:
+              PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
+            name: Get the updated sources in megalinter-reports
+            command: <<include(scripts/get_updated_sources.sh)>>
+        - github-cli/setup:
+            token: <<parameters.github_token>>
+        - run:
+            environment:
+              GIT_USER_EMAIL: <<parameters.git_user_email>>
+              GIT_USER_NAME: <<parameters.git_user_name>>
+              GIT_COMMIT_MESSAGE: <<parameters.git_commit_message>>
+              GIT_PR_TITLE: <<parameters.git_pr_title>>
+              GIT_BRANCH_NAME: <<parameters.git_branch_name>>
+              GIT_BASE_BRANCH: <<parameters.git_base_branch>>
+            name: Set up Git
+            command: <<include(scripts/setup_git.sh)>>
