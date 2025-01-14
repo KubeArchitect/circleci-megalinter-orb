@@ -7,10 +7,10 @@ description: >
   run git operations to commit and push automatic fixes, and customize various
   parameters such as Git user details and commit messages.
 
-executor:
-  name: default
-  tag: <<parameters.tag>>
-  flavor: <<parameters.flavor>>
+docker:
+  - image: oxsecurity/megalinter<<# parameters.flavor >>-<< parameters.flavor >><</parameters.flavor>>:<< parameters.tag >>
+    environment:
+      GITHUB_TOKEN: << parameters.github_token >>
 
 parameters:
   github_token:
