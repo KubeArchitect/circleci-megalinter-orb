@@ -9,6 +9,9 @@ description: >
 
 docker:
   - image: oxsecurity/megalinter<<# parameters.flavor >>-<< parameters.flavor >><</parameters.flavor>>:<< parameters.tag >>
+    auth:
+      username: $DOCKERHUB_USERNAME
+      password: $DOCKERHUB_PASSWORD
     environment:
       GITHUB_TOKEN: << parameters.github_token >>
 
