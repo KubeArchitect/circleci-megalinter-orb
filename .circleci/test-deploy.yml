@@ -32,7 +32,7 @@ workflows:
           context:
             - Main Context
           filters: *filters
-      - megalinter/megalinter
+      - megalinter/megalinter:
           name: ml-flavor
           git_base_branch: master
           persist_megalinter_reports: true
