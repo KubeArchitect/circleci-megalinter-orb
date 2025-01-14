@@ -37,7 +37,8 @@ jobs:
           context:
             - Main Context
           filters: *filters
-      -  megalinter/megalinter: &environment
+      -  megalinter/megalinter:
+          <<: *environment
           name: ml-flavor
           git_base_branch: master
           persist_megalinter_reports: true
