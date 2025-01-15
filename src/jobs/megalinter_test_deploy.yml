@@ -1,4 +1,8 @@
 ---
+# THIS CIRCLECI JOB IS NOT FOR PRODUCTION USE
+# THIS JOB IS FOR TESTING PURPOSES ONLY
+# YOU HAVE BEEN WARNED :)
+
 description: >
   This CircleCI orb integrates MegaLinter into your CI/CD pipeline.
   MegaLinter is a tool that helps you maintain code quality by automatically
@@ -31,10 +35,19 @@ parameters:
     default: default
     description: The name of executor to use.
   resource_class:
-    type: string
+    type: enum
     default: "medium"
+    enum: ["small", "medium", "medium+", "large", "xlarge", "2xlarge", "2xlarge+"]
     description: |
       The resource class to use for the job.
+      Available options:
+      - small: 1 vCPU, 2GB RAM
+      - medium: 2 vCPUs, 4GB RAM
+      - medium+: 3 vCPUs, 6GB RAM
+      - large: 4 vCPUs, 8GB RAM
+      - xlarge: 8 vCPUs, 16GB RAM
+      - 2xlarge: 16 vCPUs, 32GB RAM
+      - 2xlarge+: 20 vCPUs, 40GB RAM
       See https://circleci.com/docs/2.0/configuration-reference/#resource_class
   persist_megalinter_reports:
     type: boolean
@@ -101,6 +114,10 @@ parameters:
       Base branch to use for Git
 
 environment:
+  DISABLE_ERRORS=true
+  PRINT_ALPACA=false
+  SHOW_ELAPSED_TIME=true
+  SHOW_SKIPPED_LINTERS=false
   GITHUB_REF=$CI_PULL_REQUEST
   GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
   GITHUB_RUN_ID=$CIRCLE_BUILD_NUM
@@ -120,7 +137,7 @@ steps:
   - checkout
   - run:
       name: Run Megalinter
-      command: /bin/bash -ex /entrypoint.sh
+      command: <<include(scripts/run_megalinter.sh)>>
   - when:
       condition: <<parameters.persist_megalinter_reports>>
       steps:
