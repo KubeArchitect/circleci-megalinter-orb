@@ -106,17 +106,6 @@ parameters:
     description: |
       Base branch to use for Git
 
-environment:
-  GITHUB_REF: $CI_PULL_REQUEST
-  GITHUB_REPOSITORY: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-  GITHUB_RUN_ID: $CIRCLE_BUILD_NUM
-  GITHUB_SHA: $CIRCLE_SHA1
-  GITHUB_TOKEN: <<parameters.github_token>>
-  GITHUB_WORKSPACE: $CIRCLE_WORKING_DIRECTORY
-  CI_ACTION_RUN_URL: $CIRCLE_BUILD_URL
-  DEFAULT_WORKSPACE: $CIRCLE_WORKING_DIRECTORY
-  APPLY_FIXES: <<parameters.apply_fixes>>
-
 parallelism: <<parameters.parallelism>>
 resource_class: <<parameters.resource_class>>
 
@@ -125,10 +114,32 @@ working_directory: <<parameters.working_directory>>
 steps:
   - checkout
   - run:
+      name: DEBUG
+      command: |
+        echo "GITHUB_REF: <<pipeline.trigger_parameters.github_app.ref>>"
+        echo "GITHUB_REPOSITORY: <<pipeline.trigger_parameters.github_app.repo_name>>"
+        echo "GITHUB_RUN_ID: $GITHUB_RUN_ID"
+        echo "GITHUB_SHA: <<pipeline.trigger_parameters.github_app.commit_sha>>"
+        echo "GITHUB_WORKSPACE: <<parameters.working_directory>>"
+        echo "DEFAULT_WORKSPACE: <<parameters.working_directory>>"
+        echo "CI_ACTION_RUN_URL: $CI_ACTION_RUN_URL"
+        echo "APPLY_FIXES: <<parameters.apply_fixes>>"
+  - run:
       name: Run Megalinter
       command: <<include(scripts/run_megalinter.sh)>>
       environment:
         MEGALINTER_ENTRYPOINT: <<parameters.entrypoint>>
+        ### START GITHUB environment variables START ###
+        GITHUB_REF: <<pipeline.trigger_parameters.github_app.ref>>
+        GITHUB_REPOSITORY: <<pipeline.trigger_parameters.github_app.user_name>>/<<pipeline.trigger_parameters.github_app.repo_name>>
+        GITHUB_RUN_ID: $CIRCLE_BUILD_NUM
+        GITHUB_SHA: <<pipeline.trigger_parameters.github_app.commit_sha>>
+        GITHUB_TOKEN: <<parameters.github_token>>
+        GITHUB_WORKSPACE: <<parameters.working_directory>>
+        ### END GITHUB environment variables END ###
+        DEFAULT_WORKSPACE: <<parameters.working_directory>>
+        CI_ACTION_RUN_URL: $CIRCLE_BUILD_URL
+        APPLY_FIXES: <<parameters.apply_fixes>>
   - when:
       condition: <<parameters.persist_megalinter_reports>>
       steps:
