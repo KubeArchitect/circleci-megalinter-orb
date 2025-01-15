@@ -13,7 +13,7 @@ docker:
       username: $DOCKERHUB_USERNAME
       password: $DOCKERHUB_PASSWORD
     environment:
-      GITHUB_TOKEN: << parameters.github_token >>
+      GITHUB_TOKEN: <<parameters.github_token>>
 
 parameters:
   github_token:
@@ -42,6 +42,11 @@ parameters:
     description: |
       Whether to persist the megalinter-reports folder for use in subsequent jobs.
       This can be useful for automatically updating files in your repository based on the linter's output.
+  test_deploy:
+  type: boolean
+  default: false
+  description: |
+    This is to be used with the test_deploy workflow and should under no circumstances be used in production
   working_directory:
     type: string
     default: "/tmp/lint"
@@ -56,8 +61,7 @@ parameters:
     type: string
     default: "latest"
     description: |
-      Choose a specific tag of megalinter:
-      https://hub.docker.com/r/oxsecurity/megalinter/tags
+      Choose a specific tag of megalinter:      https://hub.docker.com/r/oxsecurity/megalinter/tags
   flavor:
     type: string
     default: ""
@@ -101,6 +105,9 @@ parameters:
       Base branch to use for Git
 
 environment:
+  <<# parameters.test_deploy>>
+  DISABLE_ERRORS=true
+  <</ parameters.test_deploy>>
   GITHUB_REF=$CI_PULL_REQUEST
   GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
   GITHUB_RUN_ID=$CIRCLE_BUILD_NUM
