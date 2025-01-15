@@ -12,6 +12,11 @@ The following environment variables must be configured:
 | `DOCKER_HUB_PASSWORD` | Docker Hub password for pulling MegaLinter image | Yes |
 | `GITHUB_TOKEN` | GitHub token for MegaLinter GitHub integration | Yes |
 
+### Security Notes
+- GitHub Token: Use a token with minimal required permissions (read-only access recommended)
+- Docker Hub: Consider using a restricted access token instead of password
+- For CircleCI security best practices, see [Using Contexts](https://circleci.com/docs/contexts/)
+
 ## Resources
 
 [CircleCI Orb Registry Page](https://circleci.com/developer/orbs/orb/RelativeSure/megalinter) - The official registry page of this orb for all versions, executors, commands, and jobs described.
@@ -21,6 +26,15 @@ The following environment variables must be configured:
 ### How to Contribute
 
 We welcome [issues](https://github.com/RelativeSure/circleci-megalinter-orb/issues) and [pull requests](https://github.com/RelativeSure/circleci-megalinter-orb/pulls) against this repository!
+
+#### Contribution Guidelines
+1. Fork and clone the repository
+2. Create a new branch for your changes
+3. Make your changes following our coding standards
+4. Test your changes locally
+5. Submit a pull request with a clear description of the changes
+
+For more details, see our [Contributing Guide](CONTRIBUTING.md).
 
 ### How to Publish an Update
 
@@ -49,7 +63,7 @@ A [Development Orb](https://circleci.com/docs/orb-concepts/#development-orbs) ca
 ```yaml
 - orb-tools/publish:
     orb_name: RelativeSure/megalinter
-    vcs_type: >
+    vcs_type: << pipeline.project.type >>
     pub_type: dev
     # Ensure this job requires all test jobs and the pack job.
     requires:
