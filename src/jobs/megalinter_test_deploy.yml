@@ -35,12 +35,21 @@ parameters:
     default: default
     description: The name of executor to use.
   resource_class:
-    type: string
+    type: enum
     default: "medium"
+    enum: ["small", "medium", "medium+", "large", "xlarge", "2xlarge", "2xlarge+"]
     description: |
       The resource class to use for the job.
+      Available options:
+      - small: 1 vCPU, 2GB RAM
+      - medium: 2 vCPUs, 4GB RAM
+      - medium+: 3 vCPUs, 6GB RAM
+      - large: 4 vCPUs, 8GB RAM
+      - xlarge: 8 vCPUs, 16GB RAM
+      - 2xlarge: 16 vCPUs, 32GB RAM
+      - 2xlarge+: 20 vCPUs, 40GB RAM
       See https://circleci.com/docs/2.0/configuration-reference/#resource_class
-  persist_megalinter_reports:
+    persist_megalinter_reports:
     type: boolean
     default: false
     description: |
