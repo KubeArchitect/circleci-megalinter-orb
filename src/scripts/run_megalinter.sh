@@ -17,4 +17,4 @@ fi
 
 # Execute with logging
 echo "Executing MegaLinter entrypoint script..."
-exec "${MEGALINTER_ENTRYPOINT}
+exec "${MEGALINTER_ENTRYPOINT}"
