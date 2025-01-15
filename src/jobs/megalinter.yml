@@ -34,8 +34,9 @@ parameters:
     type: string
     default: "medium"
     description: |
-      The resource class to use for the job.
-      See https://circleci.com/docs/2.0/configuration-reference/#resource_class
+      The resource class to use for the jobs.
+      See list of resource classes here:
+      https://circleci.com/docs/2.0/configuration-reference/#resource_class
   persist_megalinter_reports:
     type: boolean
     default: false
@@ -46,7 +47,8 @@ parameters:
     type: boolean
     default: false
     description: |
-      This is to be used with the test_deploy workflow and should under no circumstances be used in production
+      This parameter disables MegaLinter errors in test deployments by setting DISABLE_ERRORS=true.
+      This should only be used with the test_deploy workflow and must never be used in production.
   working_directory:
     type: string
     default: "/tmp/lint"
@@ -61,13 +63,19 @@ parameters:
     type: string
     default: "latest"
     description: |
-      Choose a specific tag of megalinter:      https://hub.docker.com/r/oxsecurity/megalinter/tags
+      Choose a specific tag of megalinter:
+      https://hub.docker.com/r/oxsecurity/megalinter/tags
   flavor:
     type: string
     default: ""
     description: |
       Choose a specific flavor of megalinter:
       https://megalinter.io/latest/flavors/
+  entrypoint:
+    type: string
+    default: "/entrypoint.sh"
+    description: |
+      Change entrypoint of megalinter
   run_git_operations:
     type: boolean
     default: false
@@ -106,17 +114,17 @@ parameters:
 
 environment:
   <<# parameters.test_deploy>>
-  DISABLE_ERRORS=true
+  DISABLE_ERRORS: true
   <</ parameters.test_deploy>>
-  GITHUB_REF=$CI_PULL_REQUEST
-  GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-  GITHUB_RUN_ID=$CIRCLE_BUILD_NUM
-  GITHUB_SHA=$CIRCLE_SHA1
-  GITHUB_TOKEN=<<parameters.github_token>>
-  GITHUB_WORKSPACE=$CIRCLE_WORKING_DIRECTORY
-  CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL
-  DEFAULT_WORKSPACE=$CIRCLE_WORKING_DIRECTORY
-  APPLY_FIXES=<<parameters.apply_fixes>>
+  GITHUB_REF: $CI_PULL_REQUEST
+  GITHUB_REPOSITORY: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+  GITHUB_RUN_ID: $CIRCLE_BUILD_NUM
+  GITHUB_SHA: $CIRCLE_SHA1
+  GITHUB_TOKEN: <<parameters.github_token>>
+  GITHUB_WORKSPACE: $CIRCLE_WORKING_DIRECTORY
+  CI_ACTION_RUN_URL: $CIRCLE_BUILD_URL
+  DEFAULT_WORKSPACE: $CIRCLE_WORKING_DIRECTORY
+  APPLY_FIXES: <<parameters.apply_fixes>>
 
 parallelism: <<parameters.parallelism>>
 resource_class: <<parameters.resource_class>>
@@ -128,6 +136,8 @@ steps:
   - run:
       name: Run Megalinter
       command: <<include(scripts/run_megalinter.sh)>>
+      environment:
+        MEGALINTER_ENTRYPOINT: <<parameters.entrypoint>>
   - when:
       condition: <<parameters.persist_megalinter_reports>>
       steps:
