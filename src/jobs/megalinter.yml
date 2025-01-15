@@ -117,34 +117,43 @@ steps:
       name: DEBUG
       command: <<include(scripts/debug.sh)>>
       environment:
-        MEGALINTER_ENTRYPOINT: <<parameters.entrypoint>>
-        ### START GITHUB environment variables START ###
-        GITHUB_REF: <<pipeline.trigger_parameters.github_app.ref>>
-        GITHUB_REPOSITORY: <<pipeline.trigger_parameters.github_app.user_name>>/<<pipeline.trigger_parameters.github_app.repo_name>>
-        GITHUB_RUN_ID: $CIRCLE_BUILD_NUM
-        GITHUB_SHA: <<pipeline.trigger_parameters.github_app.commit_sha>>
-        GITHUB_TOKEN: <<parameters.github_token>>
-        GITHUB_WORKSPACE: <<parameters.working_directory>>
-        ### END GITHUB environment variables END ###
-        DEFAULT_WORKSPACE: <<parameters.working_directory>>
-        CI_ACTION_RUN_URL: $CIRCLE_BUILD_URL
-        APPLY_FIXES: <<parameters.apply_fixes>>
+        GITHUB_REF=$CI_PULL_REQUEST
+        GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+        GITHUB_RUN_ID=$CIRCLE_BUILD_NUM
+        GITHUB_SHA=$CIRCLE_SHA1
+        GITHUB_TOKEN=<<parameters.github_token>>
+        GITHUB_WORKSPACE=$CIRCLE_WORKING_DIRECTORY
+        CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL
+        DEFAULT_WORKSPACE=$CIRCLE_WORKING_DIRECTORY
+        APPLY_FIXES=<<parameters.apply_fixes>>
+        # MEGALINTER_ENTRYPOINT: <<parameters.entrypoint>>
+        # ### START GITHUB environment variables START ###
+        # GITHUB_REF: <<pipeline.trigger_parameters.github_app.ref>>
+        # GITHUB_REPOSITORY: <<pipeline.trigger_parameters.github_app.user_name>>/<<pipeline.trigger_parameters.github_app.repo_name>>
+        # GITHUB_RUN_ID: $CIRCLE_BUILD_NUM
+        # GITHUB_SHA: <<pipeline.trigger_parameters.github_app.commit_sha>>
+        # GITHUB_TOKEN: <<parameters.github_token>>
+        # GITHUB_WORKSPACE: <<parameters.working_directory>>
+        # ### END GITHUB environment variables END ###
+        # DEFAULT_WORKSPACE: <<parameters.working_directory>>
+        # CI_ACTION_RUN_URL: $CIRCLE_BUILD_URL
+        # APPLY_FIXES: <<parameters.apply_fixes>>
   - run:
       name: Run Megalinter
       command: <<include(scripts/run_megalinter.sh)>>
-      environment:
-        MEGALINTER_ENTRYPOINT: <<parameters.entrypoint>>
-        ### START GITHUB environment variables START ###
-        GITHUB_REF: <<pipeline.trigger_parameters.github_app.ref>>
-        GITHUB_REPOSITORY: <<pipeline.trigger_parameters.github_app.user_name>>/<<pipeline.trigger_parameters.github_app.repo_name>>
-        GITHUB_RUN_ID: $CIRCLE_BUILD_NUM
-        GITHUB_SHA: <<pipeline.trigger_parameters.github_app.commit_sha>>
-        GITHUB_TOKEN: <<parameters.github_token>>
-        GITHUB_WORKSPACE: <<parameters.working_directory>>
-        ### END GITHUB environment variables END ###
-        DEFAULT_WORKSPACE: <<parameters.working_directory>>
-        CI_ACTION_RUN_URL: $CIRCLE_BUILD_URL
-        APPLY_FIXES: <<parameters.apply_fixes>>
+      # environment:
+        # MEGALINTER_ENTRYPOINT: <<parameters.entrypoint>>
+        # ### START GITHUB environment variables START ###
+        # GITHUB_REF: <<pipeline.trigger_parameters.github_app.ref>>
+        # GITHUB_REPOSITORY: <<pipeline.trigger_parameters.github_app.user_name>>/<<pipeline.trigger_parameters.github_app.repo_name>>
+        # GITHUB_RUN_ID: $CIRCLE_BUILD_NUM
+        # GITHUB_SHA: <<pipeline.trigger_parameters.github_app.commit_sha>>
+        # GITHUB_TOKEN: <<parameters.github_token>>
+        # GITHUB_WORKSPACE: <<parameters.working_directory>>
+        # ### END GITHUB environment variables END ###
+        # DEFAULT_WORKSPACE: <<parameters.working_directory>>
+        # CI_ACTION_RUN_URL: $CIRCLE_BUILD_URL
+        # APPLY_FIXES: <<parameters.apply_fixes>>
   - when:
       condition: <<parameters.persist_megalinter_reports>>
       steps:
