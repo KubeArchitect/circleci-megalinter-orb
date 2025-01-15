@@ -115,15 +115,20 @@ steps:
   - checkout
   - run:
       name: DEBUG
-      command: |
-        echo "GITHUB_REF: <<pipeline.trigger_parameters.github_app.ref>>"
-        echo "GITHUB_REPOSITORY: <<pipeline.trigger_parameters.github_app.repo_name>>"
-        echo "GITHUB_RUN_ID: $GITHUB_RUN_ID"
-        echo "GITHUB_SHA: <<pipeline.trigger_parameters.github_app.commit_sha>>"
-        echo "GITHUB_WORKSPACE: <<parameters.working_directory>>"
-        echo "DEFAULT_WORKSPACE: <<parameters.working_directory>>"
-        echo "CI_ACTION_RUN_URL: $CI_ACTION_RUN_URL"
-        echo "APPLY_FIXES: <<parameters.apply_fixes>>"
+      command: <<include(scripts/debug.sh)>>
+      environment:
+        MEGALINTER_ENTRYPOINT: <<parameters.entrypoint>>
+        ### START GITHUB environment variables START ###
+        GITHUB_REF: <<pipeline.trigger_parameters.github_app.ref>>
+        GITHUB_REPOSITORY: <<pipeline.trigger_parameters.github_app.user_name>>/<<pipeline.trigger_parameters.github_app.repo_name>>
+        GITHUB_RUN_ID: $CIRCLE_BUILD_NUM
+        GITHUB_SHA: <<pipeline.trigger_parameters.github_app.commit_sha>>
+        GITHUB_TOKEN: <<parameters.github_token>>
+        GITHUB_WORKSPACE: <<parameters.working_directory>>
+        ### END GITHUB environment variables END ###
+        DEFAULT_WORKSPACE: <<parameters.working_directory>>
+        CI_ACTION_RUN_URL: $CIRCLE_BUILD_URL
+        APPLY_FIXES: <<parameters.apply_fixes>>
   - run:
       name: Run Megalinter
       command: <<include(scripts/run_megalinter.sh)>>
