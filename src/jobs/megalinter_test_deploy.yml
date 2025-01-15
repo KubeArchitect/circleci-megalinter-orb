@@ -128,7 +128,13 @@ steps:
   - checkout
   - run:
       name: Run Megalinter
-      command: /bin/bash -ex /entrypoint.sh
+      command: |
+        set -eo pipefail
+        if [ ! -f /entrypoint.sh ]; then
+          echo "Error: MegaLinter entrypoint script not found"
+          exit 1
+        fi
+        /entrypoint.sh
   - when:
       condition: <<parameters.persist_megalinter_reports>>
       steps:
