@@ -137,7 +137,7 @@ steps:
   - checkout
   - run:
       name: Run Megalinter
-      command: <<include(scripts/run_megalinter.sh)>>  
+      command: <<include(scripts/run_megalinter.sh)>>
   - when:
       condition: <<parameters.persist_megalinter_reports>>
       steps:
