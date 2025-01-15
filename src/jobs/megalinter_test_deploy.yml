@@ -49,7 +49,7 @@ parameters:
       - 2xlarge: 16 vCPUs, 32GB RAM
       - 2xlarge+: 20 vCPUs, 40GB RAM
       See https://circleci.com/docs/2.0/configuration-reference/#resource_class
-    persist_megalinter_reports:
+  persist_megalinter_reports:
     type: boolean
     default: false
     description: |
