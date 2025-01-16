@@ -104,20 +104,34 @@ parallelism: <<parameters.parallelism>>
 resource_class: <<parameters.resource_class>>
 
 working_directory: <<parameters.working_directory>>
-environment:
-  MEGALINTER_ENTRYPOINT=<<parameters.entrypoint>>
-  GITHUB_REF=$CI_PULL_REQUEST
-  GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-  GITHUB_RUN_ID=$CIRCLE_BUILD_NUM
-  GITHUB_SHA=$CIRCLE_SHA1
-  GITHUB_TOKEN=<<parameters.github_token>>
-  GITHUB_WORKSPACE=<<parameters.working_directory>>
-  CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL
-  DEFAULT_WORKSPACE=<<parameters.working_directory>>
-  APPLY_FIXES=<<parameters.apply_fixes>>
+# environment:
+#   MEGALINTER_ENTRYPOINT=<<parameters.entrypoint>>
+#   GITHUB_REF=$CI_PULL_REQUEST
+#   GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+#   GITHUB_RUN_ID=$CIRCLE_BUILD_NUM
+#   GITHUB_SHA=$CIRCLE_SHA1
+#   GITHUB_TOKEN=<<parameters.github_token>>
+#   GITHUB_WORKSPACE=<<parameters.working_directory>>
+#   CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL
+#   DEFAULT_WORKSPACE=<<parameters.working_directory>>
+#   APPLY_FIXES=<<parameters.apply_fixes>>
 
 steps:
   - checkout
+  - run:
+      name: Setup Environment Variables
+      command: |
+        echo "export MEGALINTER_ENTRYPOINT=<<parameters.entrypoint>>" >> "$BASH_ENV"
+        echo "export GITHUB_REF=$CI_PULL_REQUEST" >> "$BASH_ENV"
+        echo "export GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME" >> "$BASH_ENV"
+        echo "export GITHUB_RUN_ID=$CIRCLE_BUILD_NUM" >> "$BASH_ENV"
+        echo "export GITHUB_SHA=$CIRCLE_SHA1" >> "$BASH_ENV"
+        echo "export GITHUB_TOKEN=<<parameters.github_token>>" >> "$BASH_ENV"
+        echo "export GITHUB_WORKSPACE=<<parameters.working_directory>>" >> "$BASH_ENV"
+        echo "export CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL" >> "$BASH_ENV"
+        echo "export DEFAULT_WORKSPACE=<<parameters.working_directory>>" >> "$BASH_ENV"
+        echo "export APPLY_FIXES=<<parameters.apply_fixes>>" >> "$BASH_ENV"
+        source "$BASH_ENV"
   - run:
       name: DEBUG
       command: <<include(scripts/debug.sh)>>
