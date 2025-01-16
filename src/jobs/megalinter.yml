@@ -12,8 +12,6 @@ docker:
     auth:
       username: $DOCKERHUB_USERNAME
       password: $DOCKERHUB_PASSWORD
-    environment:
-      GITHUB_TOKEN: <<parameters.github_token>>
 
 parameters:
   github_token:
@@ -26,10 +24,6 @@ parameters:
     default: 1
     description: |
       Number of parallel executors to use
-  executor:
-    type: executor
-    default: default
-    description: The name of executor to use.
   resource_class:
     type: string
     default: "medium"
