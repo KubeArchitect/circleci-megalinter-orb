@@ -12,8 +12,6 @@ docker:
     auth:
       username: $DOCKERHUB_USERNAME
       password: $DOCKERHUB_PASSWORD
-    environment:
-      GITHUB_TOKEN: << parameters.github_token >>
 
 parameters:
   github_token:
@@ -26,16 +24,13 @@ parameters:
     default: 1
     description: |
       Number of parallel executors to use
-  executor:
-    type: executor
-    default: default
-    description: The name of executor to use.
   resource_class:
     type: string
     default: "medium"
     description: |
-      The resource class to use for the job.
-      See https://circleci.com/docs/2.0/configuration-reference/#resource_class
+      The resource class to use for the jobs.
+      See list of resource classes here:
+      https://circleci.com/docs/2.0/configuration-reference/#resource_class
   persist_megalinter_reports:
     type: boolean
     default: false
@@ -64,6 +59,11 @@ parameters:
     description: |
       Choose a specific flavor of megalinter:
       https://megalinter.io/latest/flavors/
+  entrypoint:
+    type: string
+    default: "/entrypoint.sh"
+    description: |
+      Change entrypoint of megalinter
   run_git_operations:
     type: boolean
     default: false
@@ -100,27 +100,44 @@ parameters:
     description: |
       Base branch to use for Git
 
-environment:
-  GITHUB_REF=$CI_PULL_REQUEST
-  GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-  GITHUB_RUN_ID=$CIRCLE_BUILD_NUM
-  GITHUB_SHA=$CIRCLE_SHA1
-  GITHUB_TOKEN=<<parameters.github_token>>
-  GITHUB_WORKSPACE=$CIRCLE_WORKING_DIRECTORY
-  CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL
-  DEFAULT_WORKSPACE=$CIRCLE_WORKING_DIRECTORY
-  APPLY_FIXES=<<parameters.apply_fixes>>
-
 parallelism: <<parameters.parallelism>>
 resource_class: <<parameters.resource_class>>
 
 working_directory: <<parameters.working_directory>>
+# environment:
+#   MEGALINTER_ENTRYPOINT=<<parameters.entrypoint>>
+#   GITHUB_REF=$CI_PULL_REQUEST
+#   GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+#   GITHUB_RUN_ID=$CIRCLE_BUILD_NUM
+#   GITHUB_SHA=$CIRCLE_SHA1
+#   GITHUB_TOKEN=<<parameters.github_token>>
+#   GITHUB_WORKSPACE=<<parameters.working_directory>>
+#   CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL
+#   DEFAULT_WORKSPACE=<<parameters.working_directory>>
+#   APPLY_FIXES=<<parameters.apply_fixes>>
 
 steps:
   - checkout
   - run:
+      name: Setup Environment Variables
+      command: |
+        echo "export MEGALINTER_ENTRYPOINT=<<parameters.entrypoint>>" >> "$BASH_ENV"
+        echo "export GITHUB_REF=$CI_PULL_REQUEST" >> "$BASH_ENV"
+        echo "export GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME" >> "$BASH_ENV"
+        echo "export GITHUB_RUN_ID=$CIRCLE_BUILD_NUM" >> "$BASH_ENV"
+        echo "export GITHUB_SHA=$CIRCLE_SHA1" >> "$BASH_ENV"
+        echo "export GITHUB_TOKEN=<<parameters.github_token>>" >> "$BASH_ENV"
+        echo "export GITHUB_WORKSPACE=<<parameters.working_directory>>" >> "$BASH_ENV"
+        echo "export CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL" >> "$BASH_ENV"
+        echo "export DEFAULT_WORKSPACE=<<parameters.working_directory>>" >> "$BASH_ENV"
+        echo "export APPLY_FIXES=<<parameters.apply_fixes>>" >> "$BASH_ENV"
+        source "$BASH_ENV"
+  - run:
+      name: DEBUG
+      command: <<include(scripts/debug.sh)>>
+  - run:
       name: Run Megalinter
-      command: /bin/bash -ex /entrypoint.sh
+      command: <<include(scripts/run_megalinter.sh)>>
   - when:
       condition: <<parameters.persist_megalinter_reports>>
       steps:
