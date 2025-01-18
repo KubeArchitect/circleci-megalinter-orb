@@ -1,0 +1,17 @@
+---
+version: 2.1
+
+orbs:
+  megalinter: {}
+
+workflows:
+  run-megalinter:
+    jobs:
+      - megalinter/megalinter
+      - megalinter/git
+        when: # All must be true to trigger
+         and:
+          - equal: [ false, <<pipeline.parameters.skipUnitTests>> ]
+          - equal: [ true, <<pipeline.parameters.skipSystemTests>> ]
+          - equal: [ false, <<pipeline.parameters.updateTranslation>> ]
+    
