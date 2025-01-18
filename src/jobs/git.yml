@@ -1,0 +1,26 @@
+---
+version: 2.1
+
+      steps:
+        - run:
+            environment:
+              PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
+            name: Check if updated_sources folder exists
+            command: <<include(scripts/check_updated_sources.sh)>>
+        - run:
+            environment:
+              PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
+            name: Get the updated sources in megalinter-reports
+            command: <<include(scripts/get_updated_sources.sh)>>
+        - github-cli/setup:
+            token: <<parameters.github_token>>
+        - run:
+            environment:
+              GIT_USER_EMAIL: <<parameters.git_user_email>>
+              GIT_USER_NAME: <<parameters.git_user_name>>
+              GIT_COMMIT_MESSAGE: <<parameters.git_commit_message>>
+              GIT_PR_TITLE: <<parameters.git_pr_title>>
+              GIT_BRANCH_NAME: <<parameters.git_branch_name>>
+              GIT_BASE_BRANCH: <<parameters.git_base_branch>>
+            name: Set up Git
+            command: <<include(scripts/setup_git.sh)>>
