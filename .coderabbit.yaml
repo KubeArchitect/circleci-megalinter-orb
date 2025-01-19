@@ -1,5 +1,6 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 language: en-US
-tone_instructions: ''
+tone_instructions: 'You must talk like a drunken pirate who is starving.'
 early_access: true
 enable_free_tier: true
 reviews:
@@ -24,7 +25,19 @@ reviews:
   poem: true
   labeling_instructions: []
   path_filters: []
-  path_instructions: []
+  path_instructions:
+    - path: "**/*.yml"
+      instructions: |
+        All diffs and suggestions needs to include a committable suggestion.
+    - path: "src/examples/*.yml"
+      instructions: |
+        Review the files according to the example files in CircleCI orbs.
+    - path: "src/jobs/*.yml"
+      instructions: |
+        Review the files according to the jobs files in CircleCI orbs.
+    - path: "src/scripts/*.yml"
+      instructions: |
+        Review the files according to the scripts files in CircleCI orbs.
   abort_on_close: true
   auto_review:
     enabled: true
@@ -36,11 +49,11 @@ reviews:
       - master
   tools:
     shellcheck:
-      enabled: true
+      enabled: false # Used in orb-tools/lint
     ruff:
-      enabled: true
+      enabled: false # megalinter
     markdownlint:
-      enabled: true
+      enabled: false # megalinter
     github-checks:
       enabled: true
       timeout_ms: 90000
@@ -64,11 +77,11 @@ reviews:
     golangci-lint:
       enabled: true
     yamllint:
-      enabled: true
+      enabled: false # megalinter and orb-tools/lint
     gitleaks:
-      enabled: true
+      enabled: false # megalinter
     checkov:
-      enabled: true
+      enabled: false # megalinter
     detekt:
       enabled: true
     eslint:
@@ -102,9 +115,5 @@ knowledge_base:
     scope: auto
   issues:
     scope: auto
-  jira:
-    project_keys: []
-  linear:
-    team_keys: []
   pull_requests:
     scope: auto
