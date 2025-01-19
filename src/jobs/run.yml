@@ -6,8 +6,8 @@ workflows:
     jobs:
       - megalinter/megalinter
       - megalinter/git
-        when: # All must be true to trigger
-          and:
-            - equal: [ false, <<pipeline.parameters.skipUnitTests>> ]
-            - equal: [ true, <<pipeline.parameters.skipSystemTests>> ]
-            - equal: [ false, <<pipeline.parameters.updateTranslation>> ]
+          when: # All must be true to trigger
+            and:
+              - equal: [ true, <<parameters.run_git_operations>> ]
+              - equal: [ true, <<parameters.persist_megalinter_reports>> ]
+              - equal: [ true, <<parameters.apply_fixes>> ]
