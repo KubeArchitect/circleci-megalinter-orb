@@ -28,7 +28,7 @@ parameters:
       https://hub.docker.com/r/oxsecurity/megalinter/tags
   flavor:
     type: enum
-    default: ''
+   # default: ''
     description: |
       Choose a specific flavor of megalinter:
       https://megalinter.io/latest/flavors/
