@@ -86,7 +86,7 @@ steps:
             environment:
               GIT_USER_EMAIL: <<parameters.git_user_email>>
               GIT_USER_NAME: <<parameters.git_user_name>>
-              GIT_COMMIT_MESSAGE: <<parameters.git_commit_message>>
+              GIT_COMMIT_MESSAGE: <<parameters.git_pr_commit_message>>
               GIT_PR_TITLE: <<parameters.git_pr_title>>
               GIT_BRANCH_NAME: <<parameters.git_pr_branch_name>>
             name: Set up Git
