@@ -39,20 +39,23 @@ workflows:
       # The orb must be re-packed for publishing, and saved to the workspace.
       - orb-tools/pack:
           filters: *release-filters
-      # The following publish is only for dev branches.
+      # The following pack ans publish is only for dev branches.
       - orb-tools/pack:
+          name: dev-pack
           filters: *dev-filters
       - orb-tools/publish:
+          name: dev-publish
           orb_name: relativesure/megalinter
           vcs_type: << pipeline.project.type >>
           pub_type: dev
           # Ensure this job requires all test jobs and the pack job.
           requires:
-            - orb-tools/pack
+            - dev-pack
             - megalinter/run
           context:
             - Main Context
           filters: *dev-filters
+      # the following publish is for prod use
       - orb-tools/publish:
           orb_name: relativesure/megalinter
           vcs_type: << pipeline.project.type >>
