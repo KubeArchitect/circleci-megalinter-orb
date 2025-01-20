@@ -28,12 +28,13 @@ parameters:
       https://hub.docker.com/r/oxsecurity/megalinter/tags
   flavor:
     type: enum
-   # default: ''
+    default: ''
     description: |
       Choose a specific flavor of megalinter:
       https://megalinter.io/latest/flavors/
       Pull Requests are welcome to add more flavors!
     enum:
+      - ''
       - c_cpp
       - ci_light
       - cupcake
