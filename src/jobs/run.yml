@@ -92,7 +92,7 @@ steps:
       name: DEBUG
       command: |
         #!/bin/bash
-        # trigger again
+        # trigger again again
         echo $GIT_BASE_BRANCH
         echo $CIRCLE_BRANCH
         echo $CIRCLE_PR_NUMBER
