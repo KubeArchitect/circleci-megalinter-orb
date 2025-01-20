@@ -30,9 +30,9 @@ workflows:
       # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
       # Test your orb's commands in a custom job and test your orb's jobs directly as a part of this workflow.
       - megalinter/run:
-          git_base_branch: master
+          git_pr_base_branch: << pipeline.git.base_branch >>
+          git_pr_current_branch: << pipeline.git.branch >>
           persist_megalinter_reports: true
-          resource_class: large
           context:
             - Main Context
           filters: *filters

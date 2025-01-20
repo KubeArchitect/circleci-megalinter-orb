@@ -14,4 +14,5 @@ git commit -m "${GIT_COMMIT_MESSAGE}"
 git push --set-upstream origin "${GIT_BRANCH_NAME}"
 
 # Create a PR
-gh pr create --title "${GIT_PR_TITLE}" --body "${GIT_COMMIT_MESSAGE}" --head "${GIT_BRANCH_NAME}"
+# gh pr create --title "${GIT_PR_TITLE}" --body "${GIT_COMMIT_MESSAGE}" --base "${GIT_BASE_BRANCH}" --head "${GIT_BRANCH_NAME}"
+gh pr create --title "${GIT_PR_TITLE}" --body "${GIT_COMMIT_MESSAGE}" --base "${GIT_BASE_BRANCH}" --head "${GIT_BRANCH_NAME}"

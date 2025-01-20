@@ -58,35 +58,42 @@ parameters:
     default: "megalinter-fixes-$CIRCLE_BUILD_NUM"
     description: |
       Branch name to use for Git
+  git_pr_base_branch:
+    type: boolean
+    description: |
+      Boolean parameter for base branch to use for Git
+  git_pr_current_branch:
+    type: string
+    description: |
+      Current branch to use for Git
+      Used only for base branch and to setup git pull request
 
 steps:
+  - attach_workspace:
+      at: <<parameters.working_directory>>
+  - run:
+      environment:
+        PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
+      name: Check if updated_sources folder exists
+      command: <<include(scripts/check_updated_sources.sh)>>
+  - run:
+      environment:
+        PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
+      name: Get the updated sources in megalinter-reports
+      command: <<include(scripts/get_updated_sources.sh)>>
+  - github-cli/setup:
+      token: <<parameters.github_token>>
   - when:
       condition:
-        and:
-          - equal: [ true, <<parameters.run_git_operations>> ]
-          - equal: [ true, <<parameters.apply_fixes>> ]
-          - equal: [ true, <<parameters.persist_megalinter_reports>> ]
+        equal: [ true, <<pipeline.git.branch.is_default>> ]
       steps:
-        - attach_workspace:
-            at: <<parameters.working_directory>>
-        - run:
-            environment:
-              PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
-            name: Check if updated_sources folder exists
-            command: <<include(scripts/check_updated_sources.sh)>>
-        - run:
-            environment:
-              PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
-            name: Get the updated sources in megalinter-reports
-            command: <<include(scripts/get_updated_sources.sh)>>
-        - github-cli/setup:
-            token: <<parameters.github_token>>
-        - run:
-            environment:
-              GIT_USER_EMAIL: <<parameters.git_user_email>>
-              GIT_USER_NAME: <<parameters.git_user_name>>
-              GIT_COMMIT_MESSAGE: <<parameters.git_pr_commit_message>>
-              GIT_PR_TITLE: <<parameters.git_pr_title>>
-              GIT_BRANCH_NAME: <<parameters.git_pr_branch_name>>
-            name: Set up Git
-            command: <<include(scripts/setup_git.sh)>>
+      - run:
+          environment:
+            GIT_USER_EMAIL: <<parameters.git_user_email>>
+            GIT_USER_NAME: <<parameters.git_user_name>>
+            GIT_COMMIT_MESSAGE: <<parameters.git_pr_commit_message>>
+            GIT_PR_TITLE: <<parameters.git_pr_title>>
+            GIT_BRANCH_NAME: <<parameters.git_pr_branch_name>>
+            GIT_CURRENT_BRANCH: <<pipeline.git.branch>>
+          name: Set up Git
+          command: <<include(scripts/setup_git.sh)>>
