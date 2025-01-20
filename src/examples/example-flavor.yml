@@ -1,4 +1,3 @@
----
 description: >
   Run Megalinter on your project to lint all supported files.
   This will run using the python flavor and persisting the megalinter-reports folder,
