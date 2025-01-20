@@ -58,10 +58,6 @@ parameters:
     default: "megalinter-fixes-$CIRCLE_BUILD_NUM"
     description: |
       Branch name to use for Git
-  git_pr_base_branch:
-    type: boolean
-    description: |
-      Boolean parameter for base branch to use for Git
   git_pr_current_branch:
     type: string
     description: |
