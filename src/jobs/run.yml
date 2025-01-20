@@ -122,3 +122,4 @@ steps:
             git_pr_commit_message: <<parameters.git_pr_commit_message>>
             git_pr_title: <<parameters.git_pr_title>>
             git_pr_branch_name: <<parameters.git_pr_branch_name>>
+            git_pr_current_branch: <<parameters.  git_pr_current_branch>>
