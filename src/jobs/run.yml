@@ -110,7 +110,7 @@ steps:
           - equal: [ true, <<parameters.run_git_operations>> ]
           - equal: [ true, <<parameters.apply_fixes>> ]
           - equal: [ true, <<parameters.persist_megalinter_reports>> ]
-          - equal: [ true, <<pipeline.git.branch.is_default>> ]
+          - equal: [ true, <<parameters.git_pr_base_branch >> ]
       steps:
         - run_git:
             run_git_operations: <<parameters.run_git_operations>>

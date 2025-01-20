@@ -72,28 +72,24 @@ steps:
   - attach_workspace:
       at: <<parameters.working_directory>>
   - run:
-      environment:
-        PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
       name: Check if updated_sources folder exists
       command: <<include(scripts/check_updated_sources.sh)>>
-  - run:
       environment:
         PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
+  - run:
       name: Get the updated sources in megalinter-reports
       command: <<include(scripts/get_updated_sources.sh)>>
+      environment:
+        PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
   - github-cli/setup:
       token: <<parameters.github_token>>
-  - when:
-      condition:
-        equal: [ true, <<pipeline.git.branch.is_default>> ]
-      steps:
-      - run:
-          environment:
-            GIT_USER_EMAIL: <<parameters.git_user_email>>
-            GIT_USER_NAME: <<parameters.git_user_name>>
-            GIT_COMMIT_MESSAGE: <<parameters.git_pr_commit_message>>
-            GIT_PR_TITLE: <<parameters.git_pr_title>>
-            GIT_BRANCH_NAME: <<parameters.git_pr_branch_name>>
-            GIT_CURRENT_BRANCH: <<pipeline.git.branch>>
-          name: Set up Git
-          command: <<include(scripts/setup_git.sh)>>
+  - run:
+      name: Set up Git
+      command: <<include(scripts/setup_git.sh)>>
+      environment:
+        GIT_USER_EMAIL: <<parameters.git_user_email>>
+        GIT_USER_NAME: <<parameters.git_user_name>>
+        GIT_COMMIT_MESSAGE: <<parameters.git_pr_commit_message>>
+        GIT_PR_TITLE: <<parameters.git_pr_title>>
+        GIT_BRANCH_NAME: <<parameters.git_pr_branch_name>>
+        GIT_CURRENT_BRANCH: <<parameters.git_pr_current_branch>>
