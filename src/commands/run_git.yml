@@ -58,11 +58,11 @@ parameters:
     default: "megalinter-fixes-$CIRCLE_BUILD_NUM"
     description: |
       Branch name to use for Git
-  
+
 steps:
   - when:
       condition:
-        and: 
+        and:
           - equal: [ true, <<pipeline.git.branch.is_default>> ]
           - equal: [ true, <<parameters.run_git_operations>> ]
           - equal: [ true, <<parameters.apply_fixes>> ]

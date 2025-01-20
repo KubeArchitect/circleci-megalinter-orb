@@ -77,24 +77,23 @@ working_directory: <<parameters.working_directory>>
 steps:
   - checkout
   - run:
-    name: DEBUG
-    command: |
-      echo $BASEBRANCH
-      echo $CIRCLE_BRANCH
-      echo $CIRCLE_PR_NUMBER
-      echo $CIRCLE_PULL_REQUEST
-      echo $CI_PULL_REQUEST
-      echo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-      echo $CIRCLE_BUILD_NUM
-      echo $CIRCLE_SHA1
-      
-    environment:
-      BASEBRANCH: <<pipeline.git.branch.is_default>>
-  - run-megalinter:
+      name: DEBUG
+      command: |
+        echo $BASEBRANCH
+        echo $CIRCLE_BRANCH
+        echo $CIRCLE_PR_NUMBER
+        echo $CIRCLE_PULL_REQUEST
+        echo $CI_PULL_REQUEST
+        echo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+        echo $CIRCLE_BUILD_NUM
+        echo $CIRCLE_SHA1
+      environment:
+        BASEBRANCH: <<pipeline.git.branch.is_default>>
+  - run_megalinter:
       persist_megalinter_reports: <<parameters.persist_megalinter_reports>>
       github_token: <<parameters.github_token>>
       apply_fixes: <<parameters.apply_fixes>>
-  - run-git:
+  - run_git:
       run_git_operations: <<parameters.run_git_operations>>
       github_token: <<parameters.github_token>>
       git_user_email: <<parameters.git_user_email>>
