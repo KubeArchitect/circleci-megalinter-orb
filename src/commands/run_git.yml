@@ -88,7 +88,6 @@ steps:
               GIT_USER_NAME: <<parameters.git_user_name>>
               GIT_COMMIT_MESSAGE: <<parameters.git_commit_message>>
               GIT_PR_TITLE: <<parameters.git_pr_title>>
-              GIT_BRANCH_NAME: <<parameters.git_branch_name>>
-              GIT_BASE_BRANCH: <<parameters.git_base_branch>>
+              GIT_BRANCH_NAME: <<parameters.git_pr_branch_name>>
             name: Set up Git
             command: <<include(scripts/setup_git.sh)>>
