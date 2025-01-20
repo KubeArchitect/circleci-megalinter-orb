@@ -1,0 +1,63 @@
+description: >
+  This CircleCI orb integrates MegaLinter into your CI/CD pipeline.
+  MegaLinter is a tool that helps you maintain code quality by automatically
+  running linters and formatters on your codebase. This orb provides a job
+  to run MegaLinter on your project, with options to persist the linter reports,
+  run git operations to commit and push automatic fixes, and customize various
+  parameters such as Git user details and commit messages.
+
+parameters:
+  github_token:
+    type: env_var_name
+    default: GITHUB_TOKEN
+    description: |
+      GitHub token to use for the reporters in megalinter
+  persist_megalinter_reports:
+    type: boolean
+    default: false
+    description: |
+      Whether to persist the megalinter-reports folder for use in subsequent jobs.
+      This can be useful for automatically updating files in your repository based on the linter's output.
+  working_directory:
+    type: string
+    default: "/tmp/lint"
+    description: |
+      The working directory to run megalinter in.
+  apply_fixes:
+    type: boolean
+    default: true
+    description: |
+      If megalinter should apply fixes to the files.
+  entrypoint:
+    type: string
+    default: "/entrypoint.sh"
+    description: |
+      Change entrypoint of megalinter
+
+steps:
+  - run:
+      name: Setup Environment Variables
+      command: |
+        echo "export MEGALINTER_ENTRYPOINT=<<parameters.entrypoint>>" >> "$BASH_ENV"
+        echo "export GITHUB_REF=$CI_PULL_REQUEST" >> "$BASH_ENV"
+        echo "export GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME" >> "$BASH_ENV"
+        echo "export GITHUB_RUN_ID=$CIRCLE_BUILD_NUM" >> "$BASH_ENV"
+        echo "export GITHUB_SHA=$CIRCLE_SHA1" >> "$BASH_ENV"
+        echo "export GITHUB_TOKEN=<<parameters.github_token>>" >> "$BASH_ENV"
+        echo "export GITHUB_WORKSPACE=<<parameters.working_directory>>" >> "$BASH_ENV"
+        echo "export CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL" >> "$BASH_ENV"
+        echo "export DEFAULT_WORKSPACE=<<parameters.working_directory>>" >> "$BASH_ENV"
+        echo "export APPLY_FIXES=<<parameters.apply_fixes>>" >> "$BASH_ENV"
+        source "$BASH_ENV"
+  - run:
+      name: Run Megalinter
+      command: <<include(scripts/run_megalinter.sh)>>
+  - when:
+      condition: <<parameters.persist_megalinter_reports>>
+      steps:
+        - store_artifacts:
+            path: megalinter-reports
+        - persist_to_workspace:
+            root: <<parameters.working_directory>>
+            paths:
+              - megalinter-reports

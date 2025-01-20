@@ -14,8 +14,8 @@ _**Edit this area to include a custom title and description.**_
 Following variables needs to be set to correct clone the megalinter image. They are personal API keys from Docker Hub.
 
 ```bash
-$DOCKER_HUB_USER
-$DOCKER_HUB_PASSWORD
+$DOCKERHUB_USERNAME
+$DOCKERHUB_PASSWORD
 ```
 
 Setup GitHub auth within Megalinter orb by setting following environment variable:

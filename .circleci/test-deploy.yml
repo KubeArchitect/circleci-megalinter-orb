@@ -1,4 +1,3 @@
----
 version: 2.1
 orbs:
   # Your orb will be automatically injected here during the pipeline.
@@ -30,28 +29,33 @@ workflows:
     jobs:
       # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
       # Test your orb's commands in a custom job and test your orb's jobs directly as a part of this workflow.
-      - megalinter/megalinter:
-          git_base_branch: master
+      - megalinter/run:
+          git_pr_base_branch: << pipeline.git.branch.is_default >>
+          git_pr_current_branch: << pipeline.git.branch >>
           persist_megalinter_reports: true
-          resource_class: large
           context:
             - Main Context
           filters: *filters
       # The orb must be re-packed for publishing, and saved to the workspace.
       - orb-tools/pack:
           filters: *release-filters
-      # The following publish is only for dev branches.
+      # The following pack ans publish is only for dev branches.
+      - orb-tools/pack:
+          name: dev-pack
+          filters: *dev-filters
       - orb-tools/publish:
+          name: dev-publish
           orb_name: relativesure/megalinter
           vcs_type: << pipeline.project.type >>
           pub_type: dev
           # Ensure this job requires all test jobs and the pack job.
           requires:
-            - orb-tools/pack
-            - megalinter/megalinter
+            - dev-pack
+            - megalinter/run
           context:
             - Main Context
           filters: *dev-filters
+      # the following publish is for prod use
       - orb-tools/publish:
           orb_name: relativesure/megalinter
           vcs_type: << pipeline.project.type >>
@@ -60,7 +64,7 @@ workflows:
           # Ensure this job requires all test jobs and the pack job.
           requires:
             - orb-tools/pack
-            - megalinter/megalinter
+            - megalinter/run
           context:
             - Main Context
           filters: *release-filters

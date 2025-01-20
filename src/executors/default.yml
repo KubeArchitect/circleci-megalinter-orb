@@ -1,0 +1,55 @@
+description: >
+  This executor runs MegaLinter with cupcake flavor in a Docker container.
+  It is useful for running MegaLinter in a CI/CD pipeline.
+  MegaLinter is a tool that helps you maintain code quality by automatically
+  running linters and formatters on your codebase.
+
+docker:
+  - image: oxsecurity/megalinter<<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>:<<parameters.tag>>
+    auth:
+      username: $DOCKERHUB_USERNAME
+      password: $DOCKERHUB_PASSWORD
+
+resource_class: <<parameters.resource_class>>
+
+parameters:
+  resource_class:
+    type: string
+    default: medium
+    description: |
+      The resource class to use for the jobs.
+      See list of resource classes here:
+      https://circleci.com/docs/2.0/configuration-reference/#resource_class
+  tag:
+    type: string
+    default: latest
+    description: |
+      Choose a specific tag of megalinter:
+      https://hub.docker.com/r/oxsecurity/megalinter/tags
+  flavor:
+    type: enum
+    default: ''
+    description: |
+      Choose a specific flavor of megalinter:
+      https://megalinter.io/latest/flavors/
+      Pull Requests are welcome to add more flavors!
+    enum:
+      - ''
+      - c_cpp
+      - ci_light
+      - cupcake
+      - documentation
+      - dotnet
+      - dotnetweb
+      - formatters
+      - go
+      - java
+      - javascript
+      - php
+      - python
+      - ruby
+      - rust
+      - salesforce
+      - security
+      - swift
+      - terraform
