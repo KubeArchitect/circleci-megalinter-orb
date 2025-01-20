@@ -58,11 +58,6 @@ parameters:
     default: "megalinter-fixes-$CIRCLE_BUILD_NUM"
     description: |
       Branch name to use for Git
-  base_branch:
-    type: string
-    default: "main"
-    description: |
-      Base branch to use for the pull request
 
 steps:
   - when:
@@ -93,6 +88,5 @@ steps:
               GIT_COMMIT_MESSAGE: <<parameters.git_pr_commit_message>>
               GIT_PR_TITLE: <<parameters.git_pr_title>>
               GIT_BRANCH_NAME: <<parameters.git_pr_branch_name>>
-              GIT_BASE_BRANCH: <<parameters.base_branch>>
             name: Set up Git
             command: <<include(scripts/setup_git.sh)>>
