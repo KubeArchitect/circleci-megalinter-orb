@@ -28,11 +28,6 @@ parameters:
     default: "/tmp/lint"
     description: |
       The working directory to run megalinter in.
-  apply_fixes:
-    type: boolean
-    default: true
-    description: |
-      If megalinter should apply fixes to the files.
   entrypoint:
     type: string
     default: "/entrypoint.sh"
@@ -88,30 +83,13 @@ working_directory: <<parameters.working_directory>>
 
 steps:
   - checkout
-  - run:
-      name: DEBUG
-      command: |
-        #!/bin/bash
-        # trigger again again
-        echo $GIT_BASE_BRANCH
-        echo $CIRCLE_BRANCH
-        echo $CIRCLE_PR_NUMBER
-        echo $CIRCLE_PULL_REQUEST
-        echo $CI_PULL_REQUEST
-        echo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-        echo $CIRCLE_BUILD_NUM
-        echo $CIRCLE_SHA1
-      environment:
-        GIT_BASE_BRANCH: <<parameters.git_pr_base_branch>>
   - run_megalinter:
       persist_megalinter_reports: <<parameters.persist_megalinter_reports>>
       github_token: <<parameters.github_token>>
-      apply_fixes: <<parameters.apply_fixes>>
   - when:
       condition:
         and:
           - equal: [ true, <<parameters.run_git_operations>> ]
-          - equal: [ true, <<parameters.apply_fixes>> ]
           - equal: [ true, <<parameters.persist_megalinter_reports>> ]
           - equal: [ true, <<parameters.git_pr_base_branch >> ]
       steps:

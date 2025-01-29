@@ -23,11 +23,6 @@ parameters:
     default: "/tmp/lint"
     description: |
       The working directory to run megalinter in.
-  apply_fixes:
-    type: boolean
-    default: true
-    description: |
-      If megalinter should apply fixes to the files.
   entrypoint:
     type: string
     default: "/entrypoint.sh"
@@ -47,7 +42,6 @@ steps:
         echo "export GITHUB_WORKSPACE=<<parameters.working_directory>>" >> "$BASH_ENV"
         echo "export CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL" >> "$BASH_ENV"
         echo "export DEFAULT_WORKSPACE=<<parameters.working_directory>>" >> "$BASH_ENV"
-        echo "export APPLY_FIXES=<<parameters.apply_fixes>>" >> "$BASH_ENV"
         source "$BASH_ENV"
   - run:
       name: Run Megalinter

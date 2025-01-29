@@ -23,11 +23,6 @@ parameters:
     default: "/tmp/lint"
     description: |
       The working directory to run megalinter in.
-  apply_fixes:
-    type: boolean
-    default: true
-    description: |
-      If megalinter should apply fixes to the files.
   run_git_operations:
     type: boolean
     default: false
