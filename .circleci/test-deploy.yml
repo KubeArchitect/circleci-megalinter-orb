@@ -15,7 +15,7 @@ filters: &filters
 # Filter for dev branches
 dev-filters: &dev-filters
   branches:
-    only:  /^dev-v[0-9]+\.[0-9]+\.[0-9]+$/
+    only: /^dev-v[0-9]+\.[0-9]+\.[0-9]+$/
 
 # Filter for release tags.
 release-filters: &release-filters
@@ -24,17 +24,23 @@ release-filters: &release-filters
   tags:
     only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
 
+jobs:
+  # Create jobs to test the commands of your orbs.
+  # You may want to add additional validation steps to ensure the commands are working as expected.
+  command-test:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      # Run your orb's commands to validate them.
+      - megalinter/run_megalinter
+
 workflows:
   test-deploy:
     jobs:
       # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
       # Test your orb's commands in a custom job and test your orb's jobs directly as a part of this workflow.
-      - megalinter/run:
-          git_pr_base_branch: << pipeline.git.branch.is_default >>
-          git_pr_current_branch: << pipeline.git.branch >>
-          persist_megalinter_reports: true
-          context:
-            - Main Context
+      - command-test:
           filters: *filters
       # The orb must be re-packed for publishing, and saved to the workspace.
       - orb-tools/pack:
@@ -50,6 +56,8 @@ workflows:
           pub_type: dev
           # Ensure this job requires all test jobs and the pack job.
           requires:
+            - orb-tools/pack
+            - command-test
             - dev-pack
             - megalinter/run
           context:
@@ -64,6 +72,7 @@ workflows:
           # Ensure this job requires all test jobs and the pack job.
           requires:
             - orb-tools/pack
+            - command-test
             - megalinter/run
           context:
             - Main Context
