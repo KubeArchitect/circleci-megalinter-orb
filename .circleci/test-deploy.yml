@@ -45,10 +45,22 @@ jobs:
     steps:
       - checkout
       - megalinter/run_megalinter
+  debug:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - run: 
+          name: before
+          command: 'ls -ltah'
+      - checkout
+      - run: 
+          name: after
+          command: 'ls -ltah'
 
 workflows:
   test-deploy:
     jobs:
+      - debug
       - megalinter_wo_flavor:
           filters: *filters
       - megalinter_w_flavor:
