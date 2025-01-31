@@ -53,7 +53,7 @@ jobs:
     steps:
       - run: 
           name: before
-          command: 'ls -ltah'
+          command: 'pwd && ls -ltah'
       - checkout
       - run: 
           name: after
