@@ -35,9 +35,9 @@ jobs:
     steps:
       - checkout
       # Without flavor
-      - run_megalinter
+      - megalinter/run_megalinter
       # With flavor
-      - run_megalinter:
+      - megalinter/run_megalinter:
           flavor: ci_light
 
 workflows:
