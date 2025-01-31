@@ -12,7 +12,7 @@ filters: &filters
   tags:
     only: /.*/
 
-# Filter for dev branches
+# Filter for dev branches.
 dev-filters: &dev-filters
   branches:
     only: /^dev-v[0-9]+\.[0-9]+\.[0-9]+$/
@@ -24,26 +24,80 @@ release-filters: &release-filters
   tags:
     only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
 
+parameters:
+  resource_class:
+    type: string
+    default: medium
+    description: |
+      The resource class to use for the jobs.
+      See list of resource classes here:
+      https://circleci.com/docs/2.0/configuration-reference/#resource_class
+  tag:
+    type: string
+    default: latest
+    description: |
+      Choose a specific tag of megalinter:
+      https://hub.docker.com/r/oxsecurity/megalinter/tags
+  flavor:
+    type: enum
+    default: ''
+    description: |
+      Choose a specific flavor of megalinter:
+      https://megalinter.io/latest/flavors/
+      Pull Requests are welcome to add more flavors!
+    enum:
+      - ''
+      - c_cpp
+      - ci_light
+      - cupcake
+      - documentation
+      - dotnet
+      - dotnetweb
+      - formatters
+      - go
+      - java
+      - javascript
+      - php
+      - python
+      - ruby
+      - rust
+      - salesforce
+      - security
+      - swift
+      - terraform
+
+executors:
+  ml_flavor_executor:
+    docker:
+      - image: oxsecurity/megalinter-ci_light:v8
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+  ml_without_flavor_executor:
+    docker:
+      - image: oxsecurity/megalinter:v8
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
 
 jobs:
-  # Create jobs to test the commands of your orbs.
-  # You may want to add additional validation steps to ensure the commands are working as expected.
-  megalinter-without-flavor:
-    executor: default
+  megalinter_with_flavor:
+    parameters:
+      e:
+        type: executor
+        default: ml_flavor_executor
+    executor: << parameters.e >>
     parallelism: 2
-    docker:
-      - image: cimg/base:current
     steps:
       - checkout
-      # Without flavor
       - megalinter/run_megalinter
-  megalinter-with-flavor:
-    executor:
-      name: default
-      flavor: ci_light
+  megalinter_without_flavor:
+    parameters:
+      e:
+        type: executor
+        default: ml_without_flavor_executor
+    executor: << parameters.e >>
     parallelism: 2
-    docker:
-      - image: cimg/base:current
     steps:
       - checkout
       - megalinter/run_megalinter
@@ -51,16 +105,12 @@ jobs:
 workflows:
   test-deploy:
     jobs:
-      # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
-      # Test your orb's commands in a custom job and test your orb's jobs directly as a part of this workflow.
       - megalinter-without-flavor:
           filters: *filters
       - megalinter-with-flavor:
           filters: *filters
-      # The orb must be re-packed for publishing, and saved to the workspace.
       - orb-tools/pack:
           filters: *release-filters
-      # The following pack ans publish is only for dev branches.
       - orb-tools/pack:
           name: dev-pack
           filters: *dev-filters
@@ -69,7 +119,6 @@ workflows:
           orb_name: relativesure/megalinter
           vcs_type: << pipeline.project.type >>
           pub_type: dev
-          # Ensure this job requires all test jobs and the pack job.
           requires:
             - command-test
             - dev-pack
