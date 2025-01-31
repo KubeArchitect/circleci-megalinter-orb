@@ -4,8 +4,8 @@ description: >
 usage:
   version: 2.1
   orbs:
-    megalinter: relativesure/megalinter@1.0.6
+    megalinter: relativesure/megalinter@2.0.0
   workflows:
     run-megalinter:
       jobs:
-        - megalinter/megalinter
+        - megalinter/run
