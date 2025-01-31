@@ -32,6 +32,11 @@ parameters:
       The resource class to use for the jobs.
       See list of resource classes here:
       https://circleci.com/docs/2.0/configuration-reference/#resource_class
+  ex:
+    type: executor
+    default: ml_flavor_executor
+    description: |
+      The executor to use for the jobs.
   tag:
     type: string
     default: latest
@@ -81,33 +86,24 @@ executors:
           password: $DOCKERHUB_PASSWORD
 
 jobs:
-  megalinter_with_flavor:
-    parameters:
-      e:
-        type: executor
-        default: ml_flavor_executor
-    executor: << parameters.e >>
-    parallelism: 2
-    steps:
-      - checkout
-      - megalinter/run_megalinter
-  megalinter_without_flavor:
-    parameters:
-      e:
-        type: executor
-        default: ml_without_flavor_executor
-    executor: << parameters.e >>
+  megalinter:
+    executor: <<parameters.ex>>
     parallelism: 2
     steps:
       - checkout
       - megalinter/run_megalinter
 
+
 workflows:
   test-deploy:
     jobs:
-      - megalinter-without-flavor:
+      - megalinter:
+          name: ml_without_flavor
+          ex: ml_without_flavor_executor
           filters: *filters
-      - megalinter-with-flavor:
+      - megalinter:
+          name: ml_with_flavor
+          ex: ml_flavor_executor
           filters: *filters
       - orb-tools/pack:
           filters: *release-filters
