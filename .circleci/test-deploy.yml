@@ -33,7 +33,7 @@ jobs:
     steps:
       - checkout
       # Run your orb's commands to validate them.
-      - megalinter/run_megalinter
+      - megalinter/run
 
 workflows:
   test-deploy:
@@ -56,10 +56,8 @@ workflows:
           pub_type: dev
           # Ensure this job requires all test jobs and the pack job.
           requires:
-            - orb-tools/pack
             - command-test
             - dev-pack
-            - megalinter/run
           context:
             - Main Context
           filters: *dev-filters
@@ -73,7 +71,6 @@ workflows:
           requires:
             - orb-tools/pack
             - command-test
-            - megalinter/run
           context:
             - Main Context
           filters: *release-filters
