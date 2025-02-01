@@ -79,8 +79,6 @@ parameters:
 parallelism: <<parameters.parallelism>>
 executor: default
 
-working_directory: <<parameters.working_directory>>
-
 steps:
   - checkout
   - run_megalinter:

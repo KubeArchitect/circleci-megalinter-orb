@@ -35,7 +35,6 @@ steps:
         echo "export GITHUB_SHA=$CIRCLE_SHA1" >> "$BASH_ENV"
         echo "export GITHUB_TOKEN=<<parameters.github_token>>" >> "$BASH_ENV"
         echo "export CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL" >> "$BASH_ENV"
-        echo "export DEFAULT_WORKSPACE=<<parameters.working_directory>>" >> "$BASH_ENV"
         source "$BASH_ENV"
   - run:
       name: Run Megalinter
@@ -48,6 +47,6 @@ steps:
         - store_artifacts:
             path: megalinter-reports
         - persist_to_workspace:
-            root: <<parameters.working_directory>>
+            root: $CIRCLE_WORKING_DIRECTORY
             paths:
               - megalinter-reports
