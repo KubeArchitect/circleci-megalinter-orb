@@ -14,7 +14,7 @@ parameters:
       GitHub token to use for the reporters in megalinter
   parallelism:
     type: integer
-    default: 2
+    default: 1
     description: |
       Number of parallel executors to use
   persist_megalinter_reports:
