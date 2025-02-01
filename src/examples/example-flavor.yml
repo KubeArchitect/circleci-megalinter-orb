@@ -1,15 +1,18 @@
 description: >
   Run Megalinter on your project to lint all supported files.
-  This will run using the python flavor and persisting the megalinter-reports folder,
+  This will run using the ci_light flavor and persisting the megalinter-reports folder,
   as well as running git operations to commit and push changes.
 usage:
   version: 2.1
   orbs:
-    megalinter: relativesure/megalinter@1.0.6
+    megalinter: relativesure/megalinter@2.0.0
   workflows:
     run-megalinter:
       jobs:
-        - megalinter/megalinter:
-            flavor: python
+        - megalinter/run:
+            # Use flavor ci_light
+            flavor: ci_light
+            # Save Megalinter reports folder as artifact
             persist_megalinter_reports: true
+            # Run git operations to commit and push changes
             run_git_operations: true

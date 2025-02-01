@@ -18,11 +18,6 @@ parameters:
     description: |
       Whether to persist the megalinter-reports folder for use in subsequent jobs.
       This can be useful for automatically updating files in your repository based on the linter's output.
-  working_directory:
-    type: string
-    default: "/tmp/lint"
-    description: |
-      The working directory to run megalinter in.
   entrypoint:
     type: string
     default: "/entrypoint.sh"
@@ -39,9 +34,8 @@ steps:
         echo "export GITHUB_RUN_ID=$CIRCLE_BUILD_NUM" >> "$BASH_ENV"
         echo "export GITHUB_SHA=$CIRCLE_SHA1" >> "$BASH_ENV"
         echo "export GITHUB_TOKEN=<<parameters.github_token>>" >> "$BASH_ENV"
-        echo "export GITHUB_WORKSPACE=<<parameters.working_directory>>" >> "$BASH_ENV"
         echo "export CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL" >> "$BASH_ENV"
-        echo "export DEFAULT_WORKSPACE=<<parameters.working_directory>>" >> "$BASH_ENV"
+        echo "export DEFAULT_WORKSPACE=$CIRCLE_WORKING_DIRECTORY" >> "$BASH_ENV"
         source "$BASH_ENV"
   - run:
       name: Run Megalinter
@@ -52,6 +46,6 @@ steps:
         - store_artifacts:
             path: megalinter-reports
         - persist_to_workspace:
-            root: <<parameters.working_directory>>
+            root: $CIRCLE_WORKING_DIRECTORY
             paths:
               - megalinter-reports

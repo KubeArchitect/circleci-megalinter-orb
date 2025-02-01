@@ -1,6 +1,3 @@
-#!/bin/bash
-# This script is used to setup git and create a PR
-
 # Setup git user
 git config --local user.email "${GIT_USER_EMAIL}"
 git config --local user.name "${GIT_USER_NAME}"

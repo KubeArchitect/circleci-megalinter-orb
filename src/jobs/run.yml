@@ -7,6 +7,26 @@ description: >
   parameters such as Git user details and commit messages.
 
 parameters:
+  resource_class:
+    type: string
+    default: medium
+    description: |
+      The resource class to use for the jobs.
+      See list of resource classes here:
+      https://circleci.com/docs/2.0/configuration-reference/#resource_class
+  tag:
+    type: string
+    default: latest
+    description: |
+      Choose a specific tag of megalinter:
+      https://hub.docker.com/r/oxsecurity/megalinter/tags
+  flavor:
+    type: string
+    default: ""
+    description: |
+      Choose a specific flavor of megalinter:
+      https://megalinter.io/latest/flavors/
+      Pull Requests are welcome to add more flavors!
   github_token:
     type: env_var_name
     default: GITHUB_TOKEN
@@ -14,7 +34,7 @@ parameters:
       GitHub token to use for the reporters in megalinter
   parallelism:
     type: integer
-    default: 2
+    default: 1
     description: |
       Number of parallel executors to use
   persist_megalinter_reports:
@@ -23,11 +43,6 @@ parameters:
     description: |
       Whether to persist the megalinter-reports folder for use in subsequent jobs.
       This can be useful for automatically updating files in your repository based on the linter's output.
-  working_directory:
-    type: string
-    default: "/tmp/lint"
-    description: |
-      The working directory to run megalinter in.
   entrypoint:
     type: string
     default: "/entrypoint.sh"
@@ -76,10 +91,14 @@ parameters:
       Used only for to setup git pull request
       together with $git_pr_base_branch
 
-parallelism: <<parameters.parallelism>>
-executor: default
+docker:
+  - image: oxsecurity/megalinter<<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>:<<parameters.tag>>
+    auth:
+      username: $DOCKERHUB_USERNAME
+      password: $DOCKERHUB_PASSWORD
 
-working_directory: <<parameters.working_directory>>
+resource_class: <<parameters.resource_class>>
+parallelism: <<parameters.parallelism>>
 
 steps:
   - checkout
@@ -91,7 +110,7 @@ steps:
         and:
           - equal: [ true, <<parameters.run_git_operations>> ]
           - equal: [ true, <<parameters.persist_megalinter_reports>> ]
-          - equal: [ true, <<parameters.git_pr_base_branch >> ]
+          - equal: [ true, <<parameters.git_pr_base_branch>> ]
       steps:
         - run_git:
             run_git_operations: <<parameters.run_git_operations>>

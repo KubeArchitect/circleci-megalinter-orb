@@ -12,10 +12,10 @@ filters: &filters
   tags:
     only: /.*/
 
-# Filter for dev branches
+# Filter for dev branches.
 dev-filters: &dev-filters
   branches:
-    only:  /^dev-v[0-9]+\.[0-9]+\.[0-9]+$/
+    only: /^dev-v[0-9]+\.[0-9]+\.[0-9]+$/
 
 # Filter for release tags.
 release-filters: &release-filters
@@ -24,22 +24,38 @@ release-filters: &release-filters
   tags:
     only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
 
+jobs:
+  megalinter_wo_flavor:
+    docker:
+      - image: oxsecurity/megalinter:latest
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    resource_class: relativesure/hetzner-ubuntu-kind
+    steps:
+      - checkout
+      - megalinter/run_megalinter
+  megalinter_w_flavor:
+    docker:
+      - image: oxsecurity/megalinter-ci_light:latest
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    resource_class: relativesure/hetzner-ubuntu-kind
+    steps:
+      - checkout
+      - megalinter/run_megalinter
+
 workflows:
   test-deploy:
     jobs:
-      # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
-      # Test your orb's commands in a custom job and test your orb's jobs directly as a part of this workflow.
-      - megalinter/run:
-          git_pr_base_branch: << pipeline.git.branch.is_default >>
-          git_pr_current_branch: << pipeline.git.branch >>
-          persist_megalinter_reports: true
-          context:
-            - Main Context
+      - megalinter_wo_flavor:
           filters: *filters
-      # The orb must be re-packed for publishing, and saved to the workspace.
+      - megalinter_w_flavor:
+          filters: *filters
       - orb-tools/pack:
+          name: prod-pack
           filters: *release-filters
-      # The following pack ans publish is only for dev branches.
       - orb-tools/pack:
           name: dev-pack
           filters: *dev-filters
@@ -48,10 +64,10 @@ workflows:
           orb_name: relativesure/megalinter
           vcs_type: << pipeline.project.type >>
           pub_type: dev
-          # Ensure this job requires all test jobs and the pack job.
           requires:
+            - megalinter_wo_flavor
+            - megalinter_w_flavor
             - dev-pack
-            - megalinter/run
           context:
             - Main Context
           filters: *dev-filters
@@ -63,8 +79,9 @@ workflows:
           github_token: GH_PACKAGES_TOKEN
           # Ensure this job requires all test jobs and the pack job.
           requires:
-            - orb-tools/pack
-            - megalinter/run
+            - megalinter_wo_flavor
+            - megalinter_w_flavor
+            - prod-pack
           context:
             - Main Context
           filters: *release-filters

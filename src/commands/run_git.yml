@@ -18,11 +18,6 @@ parameters:
     description: |
       Whether to persist the megalinter-reports folder for use in subsequent jobs.
       This can be useful for automatically updating files in your repository based on the linter's output.
-  working_directory:
-    type: string
-    default: "/tmp/lint"
-    description: |
-      The working directory to run megalinter in.
   run_git_operations:
     type: boolean
     default: false
@@ -61,17 +56,17 @@ parameters:
 
 steps:
   - attach_workspace:
-      at: <<parameters.working_directory>>
+      at: $CIRCLE_WORKING_DIRECTORY
   - run:
       name: Check if updated_sources folder exists
       command: <<include(scripts/check_updated_sources.sh)>>
       environment:
-        PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
+        PARAM_UPD_SRC_FILES: $CIRCLE_WORKING_DIRECTORY/megalinter-reports/updated_sources
   - run:
       name: Get the updated sources in megalinter-reports
       command: <<include(scripts/get_updated_sources.sh)>>
       environment:
-        PARAM_UPD_SRC_FILES: <<parameters.working_directory>>/megalinter-reports/updated_sources
+        PARAM_UPD_SRC_FILES: $CIRCLE_WORKING_DIRECTORY/megalinter-reports/updated_sources
   - github-cli/setup:
       token: <<parameters.github_token>>
   - run:

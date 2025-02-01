@@ -1,5 +1,3 @@
-#!/bin/bash        
-set -eo pipefail
 # Allow configurable entrypoint path
 ML_ENTRYPOINT="${MEGALINTER_ENTRYPOINT}"
 
