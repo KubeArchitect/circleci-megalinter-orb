@@ -27,29 +27,9 @@ parameters:
       Choose a specific tag of megalinter:
       https://hub.docker.com/r/oxsecurity/megalinter/tags
   flavor:
-    type: enum
-    default: \"\"
+    type: string
+    default: ""
     description: |
       Choose a specific flavor of megalinter:
       https://megalinter.io/latest/flavors/
       Pull Requests are welcome to add more flavors!
-    enum:
-      - \"\"
-      - c_cpp
-      - ci_light
-      - cupcake
-      - documentation
-      - dotnet
-      - dotnetweb
-      - formatters
-      - go
-      - java
-      - javascript
-      - php
-      - python
-      - ruby
-      - rust
-      - salesforce
-      - security
-      - swift
-      - terraform
