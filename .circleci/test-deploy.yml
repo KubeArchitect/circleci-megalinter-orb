@@ -24,14 +24,6 @@ release-filters: &release-filters
   tags:
     only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
 
-### TODO
-# https://megalinter.io/latest/config-variables/
-# https://discuss.circleci.com/t/where-is-the-working-repos-directory/32015
-# Fix working directory
-### TODO
-
-# working_directory: "/tmp/lint"
-
 jobs:
   megalinter_wo_flavor:
     docker:
@@ -53,21 +45,6 @@ jobs:
     steps:
       - checkout
       - megalinter/run_megalinter
-  debug:
-    docker:
-      - image: cimg/base:current
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
-    resource_class: relativesure/hetzner-ubuntu-kind
-    steps:
-      - run: 
-          name: before
-          command: 'pwd && ls -ltah'
-      - checkout
-      - run: 
-          name: after
-          command: 'ls -ltah'
 
 workflows:
   test-deploy:
