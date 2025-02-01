@@ -30,7 +30,7 @@ release-filters: &release-filters
 # Fix working directory
 ### TODO
 
-working_directory: "/tmp/lint"
+# working_directory: "/tmp/lint"
 
 jobs:
   megalinter_wo_flavor:

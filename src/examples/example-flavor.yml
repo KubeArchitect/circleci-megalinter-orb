@@ -1,6 +1,6 @@
 description: >
   Run Megalinter on your project to lint all supported files.
-  This will run using the python flavor and persisting the megalinter-reports folder,
+  This will run using the ci_light flavor and persisting the megalinter-reports folder,
   as well as running git operations to commit and push changes.
 usage:
   version: 2.1

@@ -1,6 +1,6 @@
 description: >
   Run Megalinter on your project to lint all supported files.
-  This will run without using a flavor.
+  This will run without using a flavor or run git operations.
 usage:
   version: 2.1
   orbs:
