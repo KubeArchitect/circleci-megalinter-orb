@@ -65,7 +65,7 @@ parameters:
       Boolean parameter for base branch to use for Git
   git_pr_current_branch:
     type: string
-    default: \"\"
+    default: ""
     description: |
       Current branch to use for Git
       Used only for to setup git pull request
