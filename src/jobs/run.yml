@@ -92,7 +92,7 @@ parameters:
       together with $git_pr_base_branch
 
 parallelism: <<parameters.parallelism>>
-executor: 
+executor:
   name: default
   tag: <<parameters.tag>>
   flavor: <<parameters.flavor>>
