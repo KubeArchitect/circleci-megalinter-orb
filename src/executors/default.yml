@@ -4,13 +4,7 @@ description: >
   MegaLinter is a tool that helps you maintain code quality by automatically
   running linters and formatters on your codebase.
 
-docker:
-  - image: oxsecurity/megalinter<<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>:<<parameters.tag>>
-    auth:
-      username: $DOCKERHUB_USERNAME
-      password: $DOCKERHUB_PASSWORD
 
-resource_class: <<parameters.resource_class>>
 
 parameters:
   resource_class:

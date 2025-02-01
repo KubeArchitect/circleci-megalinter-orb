@@ -91,11 +91,14 @@ parameters:
       Used only for to setup git pull request
       together with $git_pr_base_branch
 
+docker:
+  - image: oxsecurity/megalinter<<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>:<<parameters.tag>>
+    auth:
+      username: $DOCKERHUB_USERNAME
+      password: $DOCKERHUB_PASSWORD
+
+resource_class: <<parameters.resource_class>>
 parallelism: <<parameters.parallelism>>
-executor:
-  name: default
-  tag: <<parameters.tag>>
-  flavor: <<parameters.flavor>>
 
 steps:
   - checkout
