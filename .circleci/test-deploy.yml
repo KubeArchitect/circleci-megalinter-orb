@@ -39,7 +39,7 @@ jobs:
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
-    resource_class: relativesure/hetzner-ubuntu-docker-v2
+    resource_class: relativesure/hetzner-ubuntu-docker-v3
     steps:
       - checkout
       - megalinter/run_megalinter
@@ -49,7 +49,7 @@ jobs:
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
-    resource_class: relativesure/hetzner-ubuntu-docker-v2
+    resource_class: relativesure/hetzner-ubuntu-docker-v3
     steps:
       - checkout
       - megalinter/run_megalinter
@@ -59,7 +59,7 @@ jobs:
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
-    resource_class: relativesure/hetzner-ubuntu-docker-v2
+    resource_class: relativesure/hetzner-ubuntu-docker-v3
     steps:
       - run: 
           name: before
