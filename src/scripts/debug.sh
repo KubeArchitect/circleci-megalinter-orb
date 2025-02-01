@@ -1,4 +1,3 @@
-#!/bin/bash
 set -eo pipefail
 # Debug of environment variables
 echo "MEGALINTER_ENTRYPOINT: ${MEGALINTER_ENTRYPOINT}"

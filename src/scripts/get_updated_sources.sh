@@ -1,4 +1,3 @@
-#!/bin/bash
 ITEMS=""
 for item in "${PARAM_UPD_SRC_FILES}"/*; do
         if [ -e "$item" ]; then
