@@ -1,0 +1,81 @@
+description: >
+  Run Git operations to commit and push automatic fixes made by MegaLinter.
+  This job is triggered only on the default branch and when the `run_git_operations`
+  parameter is set to `true`. It checks if the `apply_fixes` parameter is also set
+  to `true` and if the `persist_megalinter_reports` parameter is set to `true`.
+  If all conditions are met, it attaches the workspace, checks if the `updated_sources`
+  folder exists, gets the updated sources, sets up Git, and runs the Git operations.
+
+parameters:
+  github_token:
+    type: env_var_name
+    default: GITHUB_TOKEN
+    description: |
+      GitHub token to use for the reporters in megalinter
+  persist_megalinter_reports:
+    type: boolean
+    default: false
+    description: |
+      Whether to persist the megalinter-reports folder for use in subsequent jobs.
+      This can be useful for automatically updating files in your repository based on the linter's output.
+  run_git_operations:
+    type: boolean
+    default: false
+    description: |
+      Whether to run git operations to commit and push changes
+  git_user_email:
+    type: env_var_name
+    default: GIT_USER_EMAIL
+    description: |
+      Email to use for Git
+  git_user_name:
+    type: env_var_name
+    default: GIT_USER_NAME
+    description: |
+      Name to use for Git
+  git_pr_commit_message:
+    type: string
+    default: "Automated linting fixes by MegaLinter"
+    description: |
+      Commit message to use for Git
+  git_pr_title:
+    type: string
+    default: "[MegaLinter] Apply linters automatic fixes"
+    description: |
+      Title to use for the pull request
+  git_pr_branch_name:
+    type: string
+    default: "megalinter-fixes-$CIRCLE_BUILD_NUM"
+    description: |
+      Branch name to use for Git
+  git_pr_current_branch:
+    type: string
+    description: |
+      Current branch to use for Git
+      Used only for base branch and to setup git pull request
+
+steps:
+  - attach_workspace:
+      at: $CIRCLE_WORKING_DIRECTORY
+  - run:
+      name: Check if updated_sources folder exists
+      command: <<include(scripts/check_updated_sources.sh)>>
+      environment:
+        PARAM_UPD_SRC_FILES: $CIRCLE_WORKING_DIRECTORY/megalinter-reports/updated_sources
+  - run:
+      name: Get the updated sources in megalinter-reports
+      command: <<include(scripts/get_updated_sources.sh)>>
+      environment:
+        PARAM_UPD_SRC_FILES: $CIRCLE_WORKING_DIRECTORY/megalinter-reports/updated_sources
+  - github-cli/setup:
+      token: <<parameters.github_token>>
+  - run:
+      name: Set up Git
+      command: <<include(scripts/setup_git.sh)>>
+      environment:
+        GIT_USER_EMAIL: <<parameters.git_user_email>>
+        GIT_USER_NAME: <<parameters.git_user_name>>
+        GIT_COMMIT_MESSAGE: <<parameters.git_pr_commit_message>>
+        GIT_PR_TITLE: <<parameters.git_pr_title>>
+        GIT_BRANCH_NAME: <<parameters.git_pr_branch_name>>
+        GIT_CURRENT_BRANCH: <<parameters.git_pr_current_branch>>

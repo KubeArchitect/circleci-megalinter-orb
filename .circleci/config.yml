@@ -1,9 +1,8 @@
----
 version: 2.1
 setup: true
 orbs:
-  orb-tools: circleci/orb-tools@12.3
-  shellcheck: circleci/shellcheck@3.2
+  orb-tools: circleci/orb-tools@12
+  # shellcheck: circleci/shellcheck@3 # Used in megalinter
 
 filters: &filters
   tags:
@@ -18,14 +17,16 @@ workflows:
           filters: *filters
       - orb-tools/review:
           orb_name: megalinter
+          exclude: RC009
           filters: *filters
-      - shellcheck/check:
-          filters: *filters
+      # - shellcheck/check:
+      #     filters: *filters
       # Triggers the next workflow in the Orb Development Kit.
       - orb-tools/continue:
           pipeline_number: << pipeline.number >>
           vcs_type: << pipeline.project.type >>
           orb_name: megalinter
           requires:
-            [orb-tools/lint, orb-tools/pack, orb-tools/review, shellcheck/check]
+            # [orb-tools/lint, orb-tools/pack, orb-tools/review, shellcheck/check]
+            [orb-tools/lint, orb-tools/pack, orb-tools/review]
           filters: *filters

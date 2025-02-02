@@ -1,4 +1,3 @@
----
 version: 2.1
 orbs:
   # Your orb will be automatically injected here during the pipeline.
@@ -13,6 +12,11 @@ filters: &filters
   tags:
     only: /.*/
 
+# Filter for dev branches.
+dev-filters: &dev-filters
+  branches:
+    only: /^dev-v[0-9]+\.[0-9]+\.[0-9]+$/
+
 # Filter for release tags.
 release-filters: &release-filters
   branches:
@@ -20,21 +24,54 @@ release-filters: &release-filters
   tags:
     only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
 
+jobs:
+  megalinter_wo_flavor:
+    docker:
+      - image: oxsecurity/megalinter:latest
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    resource_class: relativesure/hetzner-ubuntu-kind
+    steps:
+      - checkout
+      - megalinter/run_megalinter
+  megalinter_w_flavor:
+    docker:
+      - image: oxsecurity/megalinter-ci_light:latest
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    resource_class: relativesure/hetzner-ubuntu-kind
+    steps:
+      - checkout
+      - megalinter/run_megalinter
+
 workflows:
   test-deploy:
     jobs:
-      # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
-      # Test your orb's commands in a custom job and test your orb's jobs directly as a part of this workflow.
-      - megalinter/megalinter_test_deploy:
-          git_base_branch: master
-          persist_megalinter_reports: true
-          resource_class: large
+      - megalinter_wo_flavor:
+          filters: *filters
+      - megalinter_w_flavor:
+          filters: *filters
+      - orb-tools/pack:
+          name: prod-pack
+          filters: *release-filters
+      - orb-tools/pack:
+          name: dev-pack
+          filters: *dev-filters
+      - orb-tools/publish:
+          name: dev-publish
+          orb_name: relativesure/megalinter
+          vcs_type: << pipeline.project.type >>
+          pub_type: dev
+          requires:
+            - megalinter_wo_flavor
+            - megalinter_w_flavor
+            - dev-pack
           context:
             - Main Context
-          filters: *filters
-      # The orb must be re-packed for publishing, and saved to the workspace.
-      - orb-tools/pack:
-          filters: *release-filters
+          filters: *dev-filters
+      # the following publish is for prod use
       - orb-tools/publish:
           orb_name: relativesure/megalinter
           vcs_type: << pipeline.project.type >>
@@ -42,8 +79,9 @@ workflows:
           github_token: GH_PACKAGES_TOKEN
           # Ensure this job requires all test jobs and the pack job.
           requires:
-            - orb-tools/pack
-            - megalinter/megalinter_test_deploy
+            - megalinter_wo_flavor
+            - megalinter_w_flavor
+            - prod-pack
           context:
             - Main Context
           filters: *release-filters
