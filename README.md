@@ -23,6 +23,8 @@ The following environment variables must be configured:
 
 [CircleCI Orb Docs](https://circleci.com/docs/orb-intro/#section=configuration) - Docs for using, creating, and publishing CircleCI Orbs.
 
+All examples are shown in [the examples folder](src/examples/)
+
 ### How to Contribute
 
 We welcome [issues](https://github.com/RelativeSure/circleci-megalinter-orb/issues) and [pull requests](https://github.com/RelativeSure/circleci-megalinter-orb/pulls) against this repository!
@@ -69,5 +71,5 @@ A [Development Orb](https://circleci.com/docs/orb-concepts/#development-orbs) ca
     requires:
       - orb-tools/pack
       - megalinter/megalinter
-    context: orb-publishing
+    context: < organization context >
     filters: *filters
