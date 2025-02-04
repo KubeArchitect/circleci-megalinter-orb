@@ -69,7 +69,7 @@ workflows:
             - megalinter_w_flavor
             - dev-pack
           context:
-            - Main Context
+            - main-context
           filters: *dev-filters
       # the following publish is for prod use
       - orb-tools/publish:
@@ -83,5 +83,5 @@ workflows:
             - megalinter_w_flavor
             - prod-pack
           context:
-            - Main Context
+            - main-context
           filters: *release-filters
