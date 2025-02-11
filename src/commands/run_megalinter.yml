@@ -46,6 +46,6 @@ steps:
         - store_artifacts:
             path: megalinter-reports
         - persist_to_workspace:
-            root: $CIRCLE_WORKING_DIRECTORY
+            root: /root/project
             paths:
               - megalinter-reports
