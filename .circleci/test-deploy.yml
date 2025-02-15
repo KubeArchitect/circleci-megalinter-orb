@@ -76,7 +76,6 @@ workflows:
           orb_name: relativesure/megalinter
           vcs_type: << pipeline.project.type >>
           pub_type: production
-          github_token: GH_PACKAGES_TOKEN
           # Ensure this job requires all test jobs and the pack job.
           requires:
             - megalinter_wo_flavor
