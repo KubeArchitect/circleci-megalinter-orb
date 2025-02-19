@@ -1,6 +1,6 @@
 # CircleCI MegaLinter Orb
 
-[![CircleCI Build Status](https://circleci.com/gh/RelativeSure/circleci-megalinter-orb.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/RelativeSure/circleci-megalinter-orb) [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/RelativeSure/circleci-megalinter-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
+[![CircleCI Build Status](https://circleci.com/gh/KubeArchitect/circleci-megalinter-orb.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/KubeArchitect/circleci-megalinter-orb) [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/KubeArchitect/circleci-megalinter-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
 
 ## Environment Variables
 
@@ -8,9 +8,38 @@ The following environment variables must be configured:
 
 | Variable | Description | Required |
 |----------|-------------|-----------|
-| `DOCKER_HUB_USER` | Docker Hub username for pulling MegaLinter image | Yes |
-| `DOCKER_HUB_PASSWORD` | Docker Hub password for pulling MegaLinter image | Yes |
+| `DOCKERHUB_USERNAME` | Docker Hub username for pulling MegaLinter image | Yes |
+| `DOCKERHUB_PASSWORD` | Docker Hub password for pulling MegaLinter image | Yes |
 | `GITHUB_TOKEN` | GitHub token for MegaLinter GitHub integration | Yes |
+| `GIT_USER_EMAIL` | Email to use for Git operations when auto-fixing issues | No |
+| `GIT_USER_NAME` | Name to use for Git operations when auto-fixing issues | No |
+
+## Orb Parameters
+
+The following parameters can be configured when using the orb:
+
+### General Parameters
+| Parameter | Description | Default | Required |
+|-----------|-------------|---------|-----------|
+| `resource_class` | The resource class to use for the jobs (see [resource classes](https://circleci.com/docs/2.0/configuration-reference/#resource_class)) | medium | No |
+| `tag` | Choose a specific tag of megalinter (see [available tags](https://hub.docker.com/r/oxsecurity/megalinter/tags)) | latest | No |
+| `flavor` | Choose a specific flavor of megalinter (see [available flavors](https://megalinter.io/latest/flavors/)) | "" | No |
+| `github_token` | GitHub token to use for the reporters in megalinter | GITHUB_TOKEN | No |
+| `parallelism` | Number of parallel executors to use | 1 | No |
+| `persist_megalinter_reports` | Whether to persist the megalinter-reports folder for use in subsequent jobs | false | No |
+| `entrypoint` | Change entrypoint of megalinter | "/entrypoint.sh" | No |
+
+### Git Operations Parameters
+| Parameter | Description | Default | Required |
+|-----------|-------------|---------|-----------|
+| `run_git_operations` | Whether to run git operations to commit and push changes | false | No |
+| `git_user_email` | Email to use for Git | GIT_USER_EMAIL | No |
+| `git_user_name` | Name to use for Git | GIT_USER_NAME | No |
+| `git_pr_commit_message` | Commit message to use for Git | "Automated linting fixes by MegaLinter" | No |
+| `git_pr_title` | Title to use for the pull request | "[MegaLinter] Apply linters automatic fixes" | No |
+| `git_pr_branch_name` | Branch name to use for Git | "megalinter-fixes-$CIRCLE_BUILD_NUM" | No |
+| `git_pr_base_branch` | Boolean parameter for base branch to use for Git | false | No |
+| `git_pr_current_branch` | Current branch to use for Git (used only for setting up git pull request together with git_pr_base_branch) | "" | No |
 
 ### Security Notes
 - GitHub Token: Use a token with minimal required permissions (read-only access recommended)
