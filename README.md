@@ -1,6 +1,6 @@
 # CircleCI MegaLinter Orb
 
-[![CircleCI Build Status](https://circleci.com/gh/RelativeSure/circleci-megalinter-orb.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/RelativeSure/circleci-megalinter-orb) [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/RelativeSure/circleci-megalinter-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
+[![CircleCI Build Status](https://circleci.com/gh/KubeArchitect/circleci-megalinter-orb.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/KubeArchitect/circleci-megalinter-orb) [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/KubeArchitect/circleci-megalinter-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
 
 ## Environment Variables
 
@@ -8,8 +8,8 @@ The following environment variables must be configured:
 
 | Variable | Description | Required |
 |----------|-------------|-----------|
-| `DOCKER_HUB_USER` | Docker Hub username for pulling MegaLinter image | Yes |
-| `DOCKER_HUB_PASSWORD` | Docker Hub password for pulling MegaLinter image | Yes |
+| `DOCKERHUB_USERNAME` | Docker Hub username for pulling MegaLinter image | Yes |
+| `DOCKERHUB_PASSWORD` | Docker Hub password for pulling MegaLinter image | Yes |
 | `GITHUB_TOKEN` | GitHub token for MegaLinter GitHub integration | Yes |
 
 ### Security Notes
