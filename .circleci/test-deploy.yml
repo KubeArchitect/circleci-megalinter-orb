@@ -31,7 +31,6 @@ jobs:
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
-    resource_class: kubearchitect/hetzner-ubuntu-kind
     steps:
       - checkout
       - megalinter/run_megalinter
@@ -41,7 +40,6 @@ jobs:
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
-    resource_class: kubearchitect/hetzner-ubuntu-kind
     steps:
       - checkout
       - megalinter/run_megalinter
