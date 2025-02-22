@@ -32,6 +32,16 @@ parameters:
     default: GITHUB_TOKEN
     description: |
       GitHub token to use for the reporters in megalinter
+  dockerhub_username:
+    type: env_var_name
+    default: DOCKERHUB_USERNAME
+    description: |
+      Docker Hub username to use for megalinter
+  dockerhub_password:
+    type: env_var_name
+    default: DOCKERHUB_PASSWORD
+    description: |
+      Docker Hub password to use for megalinter
   parallelism:
     type: integer
     default: 1
@@ -94,8 +104,8 @@ parameters:
 docker:
   - image: oxsecurity/megalinter<<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>:<<parameters.tag>>
     auth:
-      username: $DOCKERHUB_USERNAME
-      password: $DOCKERHUB_PASSWORD
+      username: <<parameters.dockerhub_username>>
+      password: <<parameters.dockerhub_password>>
 
 resource_class: <<parameters.resource_class>>
 parallelism: <<parameters.parallelism>>
