@@ -37,7 +37,7 @@ parameters:
     default: DOCKERHUB_USERNAME
     description: |
       Docker Hub username to use for megalinter
-dockerhub_password:
+  dockerhub_password:
     type: env_var_name
     default: DOCKERHUB_PASSWORD
     description: |
