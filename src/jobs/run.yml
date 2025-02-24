@@ -78,6 +78,11 @@ parameters:
     default: "megalinter-fixes-$CIRCLE_BUILD_NUM"
     description: |
       Branch name to use for Git
+  git_base_branch:
+    type: string
+    default: "main"
+    description: |
+      Base branch for repo
 
 docker:
   - image: oxsecurity/megalinter<<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>:<<parameters.tag>>
@@ -98,7 +103,7 @@ steps:
         and:
           - equal: [ true, <<parameters.run_git_operations>> ]
           - equal: [ true, <<parameters.persist_megalinter_reports>> ]
-          - equal: [ main, << pipeline.git.branch >> ]
+          - equal: [ <<parameters.git_base_branch>>, << pipeline.git.branch >> ]
       steps:
         - run_git:
             run_git_operations: <<parameters.run_git_operations>>
