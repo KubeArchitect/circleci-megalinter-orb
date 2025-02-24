@@ -2,9 +2,7 @@ description: >
   This CircleCI orb integrates MegaLinter into your CI/CD pipeline.
   MegaLinter is a tool that helps you maintain code quality by automatically
   running linters and formatters on your codebase. This orb provides a job
-  to run MegaLinter on your project, with options to persist the linter reports,
-  run git operations to commit and push automatic fixes, and customize various
-  parameters such as Git user details and commit messages.
+  to run MegaLinter on your project, with options to persist the linter reports.
 
 parameters:
   resource_class:
@@ -49,7 +47,7 @@ parameters:
       Number of parallel executors to use
   persist_megalinter_reports:
     type: boolean
-    default: false
+    default: true
     description: |
       Whether to persist the megalinter-reports folder for use in subsequent jobs.
       This can be useful for automatically updating files in your repository based on the linter's output.
@@ -58,48 +56,6 @@ parameters:
     default: "/entrypoint.sh"
     description: |
       Change entrypoint of megalinter
-  run_git_operations:
-    type: boolean
-    default: false
-    description: |
-      Whether to run git operations to commit and push changes
-  git_user_email:
-    type: env_var_name
-    default: GIT_USER_EMAIL
-    description: |
-      Email to use for Git
-  git_user_name:
-    type: env_var_name
-    default: GIT_USER_NAME
-    description: |
-      Name to use for Git
-  git_pr_commit_message:
-    type: string
-    default: "Automated linting fixes by MegaLinter"
-    description: |
-      Commit message to use for Git
-  git_pr_title:
-    type: string
-    default: "[MegaLinter] Apply linters automatic fixes"
-    description: |
-      Title to use for the pull request
-  git_pr_branch_name:
-    type: string
-    default: "megalinter-fixes-$CIRCLE_BUILD_NUM"
-    description: |
-      Branch name to use for Git
-  git_pr_base_branch:
-    type: boolean
-    default: false
-    description: |
-      Boolean parameter for base branch to use for Git
-  git_pr_current_branch:
-    type: string
-    default: ""
-    description: |
-      Current branch to use for Git
-      Used only for to setup git pull request
-      together with $git_pr_base_branch
 
 docker:
   - image: oxsecurity/megalinter<<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>:<<parameters.tag>>
@@ -115,19 +71,3 @@ steps:
   - run_megalinter:
       persist_megalinter_reports: <<parameters.persist_megalinter_reports>>
       github_token: <<parameters.github_token>>
-  - when:
-      condition:
-        and:
-          - equal: [ true, <<parameters.run_git_operations>> ]
-          - equal: [ true, <<parameters.persist_megalinter_reports>> ]
-          - equal: [ true, <<parameters.git_pr_base_branch>> ]
-      steps:
-        - run_git:
-            run_git_operations: <<parameters.run_git_operations>>
-            github_token: <<parameters.github_token>>
-            git_user_email: <<parameters.git_user_email>>
-            git_user_name: <<parameters.git_user_name>>
-            git_pr_commit_message: <<parameters.git_pr_commit_message>>
-            git_pr_title: <<parameters.git_pr_title>>
-            git_pr_branch_name: <<parameters.git_pr_branch_name>>
-            git_pr_current_branch: <<parameters.git_pr_current_branch>>
