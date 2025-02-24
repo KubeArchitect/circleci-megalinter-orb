@@ -25,18 +25,9 @@ release-filters: &release-filters
     only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
 
 jobs:
-  megalinter_wo_flavor:
+  megalinter:
     docker:
       - image: oxsecurity/megalinter:latest
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
-    steps:
-      - checkout
-      - megalinter/run_megalinter
-  megalinter_w_flavor:
-    docker:
-      - image: oxsecurity/megalinter-ci_light:latest
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -47,10 +38,10 @@ jobs:
 workflows:
   test-deploy:
     jobs:
-      - megalinter_wo_flavor:
+      - megalinter:
+          name: ml
           filters: *filters
-      - megalinter_w_flavor:
-          filters: *filters
+          context: main-context
       - orb-tools/pack:
           name: prod-pack
           filters: *release-filters
@@ -63,8 +54,7 @@ workflows:
           vcs_type: << pipeline.project.type >>
           pub_type: dev
           requires:
-            - megalinter_wo_flavor
-            - megalinter_w_flavor
+            - ml
             - dev-pack
           context:
             - main-context
@@ -76,8 +66,7 @@ workflows:
           pub_type: production
           # Ensure this job requires all test jobs and the pack job.
           requires:
-            - megalinter_wo_flavor
-            - megalinter_w_flavor
+            - ml
             - prod-pack
           context:
             - main-context
