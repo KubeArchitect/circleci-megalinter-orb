@@ -47,17 +47,10 @@ jobs:
 workflows:
   test-deploy:
     jobs:
-      #- megalinter_wo_flavor:
-     #     filters: *filters
-     # - megalinter_w_flavor:
-    #    filters: *filters
-      - megalinter/run:
-          name: ml_flavor
-          flavor: ci_light
+      - megalinter_wo_flavor:
           filters: *filters
           context: main-context
-      - megalinter/run:
-          name: ml
+      - megalinter_w_flavor:
           filters: *filters
           context: main-context
       - orb-tools/pack:
