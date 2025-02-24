@@ -23,16 +23,6 @@ parameters:
     default: false
     description: |
       Whether to run git operations to commit and push changes
-  git_user_email:
-    type: env_var_name
-    default: GIT_USER_EMAIL
-    description: |
-      Email to use for Git
-  git_user_name:
-    type: env_var_name
-    default: GIT_USER_NAME
-    description: |
-      Name to use for Git
   git_pr_commit_message:
     type: string
     default: "Automated linting fixes by MegaLinter"
@@ -48,11 +38,6 @@ parameters:
     default: "megalinter-fixes-$CIRCLE_BUILD_NUM"
     description: |
       Branch name to use for Git
-  git_pr_current_branch:
-    type: string
-    description: |
-      Current branch to use for Git
-      Used only for base branch and to setup git pull request
 
 steps:
   - attach_workspace:
@@ -67,15 +52,16 @@ steps:
       command: <<include(scripts/get_updated_sources.sh)>>
       environment:
         PARAM_UPD_SRC_FILES: /root/project/megalinter-reports/updated_sources
-  - github-cli/setup:
+  - gh/setup:
       token: <<parameters.github_token>>
   - run:
-      name: Set up Git
-      command: <<include(scripts/setup_git.sh)>>
+      name: Setup git
       environment:
-        GIT_USER_EMAIL: <<parameters.git_user_email>>
-        GIT_USER_NAME: <<parameters.git_user_name>>
-        GIT_COMMIT_MESSAGE: <<parameters.git_pr_commit_message>>
-        GIT_PR_TITLE: <<parameters.git_pr_title>>
-        GIT_BRANCH_NAME: <<parameters.git_pr_branch_name>>
-        GIT_CURRENT_BRANCH: <<parameters.git_pr_current_branch>>
+        GH_BRANCH: <<parameters.git_pr_branch_name>>
+        GH_COMMIT_MSG: <<parameters.gh_pr_commit_message>>
+        GH_TITLE_MSG: <<parameters.gh_pr_title>>
+      command: |
+        git checkout -b "$GH_BRANCH"
+        git add .
+        git commit -m "$GH_COMMIT_MSG"
+        gh pr create --title "$GH_TITLE_MSG"
