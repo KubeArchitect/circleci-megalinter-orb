@@ -63,16 +63,6 @@ parameters:
     default: false
     description: |
       Whether to run git operations to commit and push changes
-  git_user_email:
-    type: env_var_name
-    default: GIT_USER_EMAIL
-    description: |
-      Email to use for Git
-  git_user_name:
-    type: env_var_name
-    default: GIT_USER_NAME
-    description: |
-      Name to use for Git
   git_pr_commit_message:
     type: string
     default: "Automated linting fixes by MegaLinter"
@@ -88,18 +78,6 @@ parameters:
     default: "megalinter-fixes-$CIRCLE_BUILD_NUM"
     description: |
       Branch name to use for Git
-  git_pr_base_branch:
-    type: boolean
-    default: false
-    description: |
-      Boolean parameter for base branch to use for Git
-  git_pr_current_branch:
-    type: string
-    default: ""
-    description: |
-      Current branch to use for Git
-      Used only for to setup git pull request
-      together with $git_pr_base_branch
 
 docker:
   - image: oxsecurity/megalinter<<#parameters.flavor>>-<<parameters.flavor>><</parameters.flavor>>:<<parameters.tag>>
@@ -120,7 +98,7 @@ steps:
         and:
           - equal: [ true, <<parameters.run_git_operations>> ]
           - equal: [ true, <<parameters.persist_megalinter_reports>> ]
-          - equal: [ true, <<parameters.git_pr_base_branch>> ]
+          - equal: [ main, << pipeline.git.branch >> ]
       steps:
         - run_git:
             run_git_operations: <<parameters.run_git_operations>>
