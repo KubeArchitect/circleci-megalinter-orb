@@ -14,7 +14,7 @@ parameters:
       GitHub token to use for the reporters in megalinter
   persist_megalinter_reports:
     type: boolean
-    default: false
+    default: true
     description: |
       Whether to persist the megalinter-reports folder for use in subsequent jobs.
       This can be useful for automatically updating files in your repository based on the linter's output.
