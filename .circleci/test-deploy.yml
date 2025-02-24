@@ -48,11 +48,15 @@ workflows:
   test-deploy:
     jobs:
       - megalinter_wo_flavor:
+          name: ml_flavor
           filters: *filters
           context: main-context
       - megalinter_w_flavor:
+          name: ml
           filters: *filters
           context: main-context
+          requires:
+            - ml_flavor
       - orb-tools/pack:
           name: prod-pack
           filters: *release-filters
