@@ -47,10 +47,19 @@ jobs:
 workflows:
   test-deploy:
     jobs:
-      - megalinter_wo_flavor:
+      #- megalinter_wo_flavor:
+     #     filters: *filters
+     # - megalinter_w_flavor:
+    #    filters: *filters
+      - megalinter/run:
+          name: ml_flavor
+          flavor: ci_light
           filters: *filters
-      - megalinter_w_flavor:
+          context: main-context
+      - megalinter/run:
+          name: ml
           filters: *filters
+          context: main-context
       - orb-tools/pack:
           name: prod-pack
           filters: *release-filters
@@ -63,8 +72,8 @@ workflows:
           vcs_type: << pipeline.project.type >>
           pub_type: dev
           requires:
-            - megalinter_wo_flavor
-            - megalinter_w_flavor
+            - ml_flavor
+            - ml
             - dev-pack
           context:
             - main-context
@@ -76,8 +85,8 @@ workflows:
           pub_type: production
           # Ensure this job requires all test jobs and the pack job.
           requires:
-            - megalinter_wo_flavor
-            - megalinter_w_flavor
+            - ml_flavor
+            - ml
             - prod-pack
           context:
             - main-context
