@@ -12,5 +12,5 @@ usage:
         - megalinter/run:
             # Use flavor ci_light
             flavor: ci_light
-            # Dont save Megalinter reports folder as artifact
+            # Don't save Megalinter reports folder as artifact
             persist_megalinter_reports: false
