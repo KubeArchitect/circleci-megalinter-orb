@@ -12,7 +12,5 @@ usage:
         - megalinter/run:
             # Use flavor ci_light
             flavor: ci_light
-            # Save Megalinter reports folder as artifact
-            persist_megalinter_reports: true
-            # Run git operations to commit and push changes
-            run_git_operations: true
+            # Dont save Megalinter reports folder as artifact
+            persist_megalinter_reports: false
