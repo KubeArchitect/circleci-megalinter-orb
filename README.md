@@ -24,20 +24,8 @@ The following parameters can be configured when using the orb:
 | `flavor` | Choose a specific flavor of megalinter (see [available flavors](https://megalinter.io/latest/flavors/)) | "" | No |
 | `github_token` | GitHub token to use for the reporters in megalinter | GITHUB_TOKEN | No |
 | `parallelism` | Number of parallel executors to use | 1 | No |
-| `persist_megalinter_reports` | Whether to persist the megalinter-reports folder for use in subsequent jobs | false | No |
+| `persist_megalinter_reports` | Whether to persist the megalinter-reports folder for use in subsequent jobs | true | No |
 | `entrypoint` | Change entrypoint of megalinter | "/entrypoint.sh" | No |
-
-### Git Operations Parameters
-| Parameter | Description | Default | Required |
-|-----------|-------------|---------|-----------|
-| `run_git_operations` | Whether to run git operations to commit and push changes | false | No |
-| `git_user_email` | Email to use for Git | GIT_USER_EMAIL | No |
-| `git_user_name` | Name to use for Git | GIT_USER_NAME | No |
-| `git_pr_commit_message` | Commit message to use for Git | "Automated linting fixes by MegaLinter" | No |
-| `git_pr_title` | Title to use for the pull request | "[MegaLinter] Apply linters automatic fixes" | No |
-| `git_pr_branch_name` | Branch name to use for Git | "megalinter-fixes-$CIRCLE_BUILD_NUM" | No |
-| `git_pr_base_branch` | Boolean parameter for base branch to use for Git | false | No |
-| `git_pr_current_branch` | Current branch to use for Git (used only for setting up git pull request together with git_pr_base_branch) | "" | No |
 
 ### Security Notes
 - GitHub Token: Use a token with minimal required permissions (read-only access recommended)
