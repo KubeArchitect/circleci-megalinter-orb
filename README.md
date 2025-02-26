@@ -11,8 +11,6 @@ The following environment variables must be configured:
 | `DOCKERHUB_USERNAME` | Docker Hub username for pulling MegaLinter image | Yes |
 | `DOCKERHUB_PASSWORD` | Docker Hub password for pulling MegaLinter image | Yes |
 | `GITHUB_TOKEN` | GitHub token for MegaLinter GitHub integration | Yes |
-| `GIT_USER_EMAIL` | Email to use for Git operations when auto-fixing issues | No |
-| `GIT_USER_NAME` | Name to use for Git operations when auto-fixing issues | No |
 
 ## Orb Parameters
 
@@ -99,6 +97,6 @@ A [Development Orb](https://circleci.com/docs/orb-concepts/#development-orbs) ca
     # Ensure this job requires all test jobs and the pack job.
     requires:
       - orb-tools/pack
-      - megalinter/megalinter
+      - megalinter/run
     context: < organization context >
     filters: *filters
