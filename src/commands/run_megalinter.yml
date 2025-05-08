@@ -7,11 +7,6 @@ description: >
   parameters such as Git user details and commit messages.
 
 parameters:
-  github_token:
-    type: env_var_name
-    default: GITHUB_TOKEN
-    description: |
-      GitHub token to use for the reporters in megalinter
   persist_megalinter_reports:
     type: boolean
     default: true
@@ -33,7 +28,7 @@ steps:
         echo "export GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME" >> "$BASH_ENV"
         echo "export GITHUB_RUN_ID=$CIRCLE_BUILD_NUM" >> "$BASH_ENV"
         echo "export GITHUB_SHA=$CIRCLE_SHA1" >> "$BASH_ENV"
-        echo "export GITHUB_TOKEN=<<parameters.github_token>>" >> "$BASH_ENV"
+        echo "export GITHUB_TOKEN=$PAT" >> "$BASH_ENV"
         echo "export CI_ACTION_RUN_URL=$CIRCLE_BUILD_URL" >> "$BASH_ENV"
         echo "export DEFAULT_WORKSPACE=$CIRCLE_WORKING_DIRECTORY" >> "$BASH_ENV"
         source "$BASH_ENV"

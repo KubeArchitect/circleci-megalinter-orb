@@ -25,11 +25,6 @@ parameters:
       Choose a specific flavor of megalinter:
       https://megalinter.io/latest/flavors/
       Pull Requests are welcome to add more flavors!
-  github_token:
-    type: env_var_name
-    default: GITHUB_TOKEN
-    description: |
-      GitHub token to use for the reporters in megalinter
   parallelism:
     type: integer
     default: 1
@@ -60,4 +55,3 @@ steps:
   - checkout
   - run_megalinter:
       persist_megalinter_reports: <<parameters.persist_megalinter_reports>>
-      github_token: <<parameters.github_token>>
